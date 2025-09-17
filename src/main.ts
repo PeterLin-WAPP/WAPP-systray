@@ -14,11 +14,11 @@ function createMainWindow() {
     frame: false,
     titleBarStyle: 'hidden',
     titleBarOverlay: {
-      color: '#ddddddff',
+      color: '#f4f4f4',
       symbolColor: '#000000',
       height: 32
     },
-    backgroundColor: '#ddddddff',
+    backgroundColor: '#f4f4f4',
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false
@@ -52,11 +52,11 @@ function createTrayWindow() {
     show: false,
     titleBarStyle: 'hidden',
     titleBarOverlay: {
-      color: '#ddddddff',
+      color: '#f4f4f4',
       symbolColor: '#000000',
       height: 32
     },
-    backgroundColor: '#ddddddff',
+    backgroundColor: '#f4f4f4',
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false
