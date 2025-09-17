@@ -1,0 +1,62 @@
+{
+  "name": "windows-app",
+  "version": "1.0.0",
+  "main": "dist/main.js",
+  "scripts": {
+    "start": "concurrently \"npm run start:renderer\" \"npm run start:main\"",
+    "start:main": "tsc -p tsconfig.main.json && cross-env NODE_ENV=development electron .",
+    "start:renderer": "webpack serve --mode development",
+    "build": "webpack --mode production && tsc -p tsconfig.main.json",
+    "dist": "npm run build && electron-builder",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "electron": "^38.1.2",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "build": {
+    "appId": "com.yourcompany.windowsapp",
+    "productName": "Windows App",
+    "directories": {
+      "output": "dist-electron"
+    },
+    "win": {
+      "icon": "assets/icon.png",
+      "target": [
+        "nsis"
+      ]
+    },
+    "mac": {
+      "icon": "assets/icon.icns",
+      "target": [
+        "dmg"
+      ]
+    },
+    "linux": {
+      "icon": "assets/icon.png",
+      "target": [
+        "AppImage"
+      ]
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^24.5.1",
+    "@types/react": "^19.1.13",
+    "@types/react-dom": "^19.1.9",
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.0.0",
+    "css-loader": "^7.1.2",
+    "html-webpack-plugin": "^5.6.4",
+    "style-loader": "^4.0.0",
+    "ts-loader": "^9.5.4",
+    "typescript": "^5.9.2",
+    "webpack": "^5.101.3",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.2"
+  }
+}
