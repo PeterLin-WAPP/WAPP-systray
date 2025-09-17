@@ -1,21 +1,16 @@
+
+
 html, body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
   margin: 0;
   padding: 0;
-  height: 100%;.nav-sidebar {
-  width: 72px;
-  background-color: #dddddd;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 12px;
-  border-right: 1px solid #e0e0e0;
-}family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  background-color: #dddddd;
+  height: 100%;
+  background-color: #f4f4f4;
 }
 
 .titlebar {
   height: 32px;
-  background: #dddddd;
+  background: #f4f4f4;
   user-select: none;
   display: flex;
   position: fixed;
@@ -32,7 +27,6 @@ html, body {
   -webkit-app-region: drag;
 }
 
-/* Ensure window controls don't get draggable behavior */
 .titlebar .drag-region {
   display: flex;
   align-items: center;
@@ -64,8 +58,8 @@ html, body {
 }
 
 .nav-sidebar {
-  width: 48px;
-  background-color: #ddddddff;
+  width: 72px;
+  background-color: #f4f4f4;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -85,6 +79,7 @@ html, body {
   border-radius: 4px;
   color: #000000;
   cursor: pointer;
+  font-family: 'Segoe UI', system-ui, sans-serif;
 }
 
 .nav-item .icon {
@@ -96,19 +91,72 @@ html, body {
   font-size: 11px;
   text-align: center;
   white-space: nowrap;
+  font-family: 'Segoe UI', system-ui, sans-serif;
 }
 
 .nav-item:hover {
-  background-color: #cccccc;
+  background-color: #e7e7e7;
   width: 100%;
 }
 
 .nav-item.active {
-  background-color: #cccccc;
+  background-color: #dadada;
   width: 100%;
 }
 
 .main-content {
   flex: 1;
   padding: 20px;
+  background-color: #ffffff;
+}
+
+.main-content.tray-mode {
+  padding: 12px;
+}
+
+.app-container.tray-mode {
+  height: 480px;
+}
+
+.tray-content {
+  text-align: center;
+}
+
+.tray-content h2 {
+  font-size: 16px;
+  margin-bottom: 16px;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.tray-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tray-action {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  background-color: #f5f5f5;
+  cursor: pointer;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  text-align: left;
+}
+
+.tray-action:hover {
+  background-color: #eeeeee;
+}
+
+.tray-action i {
+  font-size: 20px;
+}
+
+.tray-action span {
+  font-size: 14px;
+  font-family: 'Segoe UI', system-ui, sans-serif;
 }
