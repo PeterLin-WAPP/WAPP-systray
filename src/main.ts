@@ -65,10 +65,10 @@ function createTrayWindow() {
 
   if (trayBounds) {
     const windowBounds = trayWindow.getBounds();
-    trayWindow.setPosition(
-      display.workArea.width - windowBounds.width,
-      display.workArea.height - windowBounds.height
-    );
+    // Position window centered above the tray icon
+    const x = Math.round(trayBounds.x + (trayBounds.width / 2) - (windowBounds.width / 2));
+    const y = trayBounds.y - windowBounds.height - 36; // 36px gap above tray icon
+    trayWindow.setPosition(x, y);
   }
 
   if (process.env.NODE_ENV === 'development') {
