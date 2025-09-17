@@ -1,0 +1,114 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;.nav-sidebar {
+  width: 72px;
+  background-color: #dddddd;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 12px;
+  border-right: 1px solid #e0e0e0;
+}family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: #dddddd;
+}
+
+.titlebar {
+  height: 32px;
+  background: #dddddd;
+  user-select: none;
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  -webkit-app-region: no-drag;
+}
+
+.drag-region {
+  width: 100%;
+  height: 100%;
+  -webkit-app-region: drag;
+}
+
+/* Ensure window controls don't get draggable behavior */
+.titlebar .drag-region {
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  width: 100%;
+}
+
+.window-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 4px;
+  font-size: 12px;
+  color: #000000;
+  -webkit-app-region: drag;
+}
+
+.window-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.app-container {
+  display: flex;
+  height: 100vh;
+  padding-top: 32px;
+  box-sizing: border-box;
+}
+
+.nav-sidebar {
+  width: 48px;
+  background-color: #ddddddff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 8px;
+  border-right: 1px solid #e0e0e0;
+}
+
+.nav-item {
+  width: 48px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  padding: 8px 0;
+  border-radius: 4px;
+  color: #000000;
+  cursor: pointer;
+}
+
+.nav-item .icon {
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+.nav-item .label {
+  font-size: 11px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.nav-item:hover {
+  background-color: #cccccc;
+  width: 100%;
+}
+
+.nav-item.active {
+  background-color: #cccccc;
+  width: 100%;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+}

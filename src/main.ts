@@ -5,9 +5,17 @@ function createWindow() {
   // Create the browser window.
   const iconPath = path.join(__dirname, '../assets/icon.png');
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1024,
+    height: 768,
     icon: iconPath,
+    frame: false,
+    titleBarStyle: 'hidden',
+    titleBarOverlay: {
+      color: '#ddddddff',
+      symbolColor: '#000000',
+      height: 32
+    },
+    backgroundColor: '#ddddddff',
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false
@@ -22,7 +30,7 @@ function createWindow() {
 
   // Load the index.html file.
   if (process.env.NODE_ENV === 'development') {
-    mainWindow.loadURL('http://localhost:4000');
+    mainWindow.loadURL('http://localhost:4001');
     // Open the DevTools.
     mainWindow.webContents.openDevTools();
   } else {
