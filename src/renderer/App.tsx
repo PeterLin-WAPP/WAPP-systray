@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import './styles.css';
 // Import images using webpack's module system
 const appIcon = require('../../assets/icon.ico');
+const expandIcon = require('../../assets/expand.svg');
+const profileIcon = require('../../assets/profile.png');
 const cpcWallpaper = require('../../assets/CPCwallpaper.png');
 const app1Icon = require('../../assets/app1.png');
 const app2Icon = require('../../assets/app2.png');
@@ -26,14 +28,33 @@ export const App: React.FC = () => {
 
   return (
     <>
-      <div className="titlebar">
-        <div className="drag-region">
+      {!isTrayWindow ? (
+        <div className="titlebar">
+          <div className="drag-region">
+            <div className="window-title">
+              <img src={appIcon} className="window-icon" alt="Windows App" />
+              <span>Windows App</span>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="tray-titlebar">
           <div className="window-title">
             <img src={appIcon} className="window-icon" alt="Windows App" />
             <span>Windows App</span>
           </div>
+          <div className="tray-controls">
+            <button 
+              className="tray-control-button"
+            >
+              <img src={expandIcon} alt="Expand" width="14" height="14" />
+            </button>
+            <div className="me-control">
+              <img src={profileIcon} alt="Profile" className="profile-icon" />
+            </div>
+          </div>
         </div>
-      </div>
+      )}
       <div className={`app-container ${isTrayWindow ? 'tray-mode' : ''}`}>
         {!isTrayWindow && (
           <nav className="nav-sidebar">

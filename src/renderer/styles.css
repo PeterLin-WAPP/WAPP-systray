@@ -20,15 +20,27 @@ html, body {
   -webkit-app-region: no-drag;
 }
 
-/* .app-container.tray-mode .titlebar {
-  background: url('../../assets/icon.ico') lightgray 0% 0% / 100px 100px repeat,
-              linear-gradient(0deg, rgba(243, 243, 243, 0.00) 0%, rgba(243, 243, 243, 0.00) 100%),
-              rgba(243, 243, 243, 0.80);
+.tray-titlebar {
+  height: 32px;
+  user-select: none;
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding-left: 16px;
+  padding-top: 16px;
+  padding-right: 16px;
+  background: rgba(243, 243, 243, 0.90);
   background-blend-mode: normal, color, luminosity;
+  -webkit-backdrop-filter: blur(30px);
   backdrop-filter: blur(30px);
   border-top-left-radius: 7px;
   border-top-right-radius: 7px;
-} */
+  justify-content: space-between;
+  align-items: center;
+}
 
 .drag-region {
   width: 100%;
@@ -59,11 +71,67 @@ html, body {
   object-fit: contain;
 }
 
+.tray-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  -webkit-app-region: no-drag;
+}
+
+.tray-control-button {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #000000;
+  border: none;
+  background: transparent;
+  padding: 0;
+  outline: none;
+}
+
+.tray-control-button:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.tray-control-button img {
+  width: 24px;
+  height: 24px;
+}
+
+.me-control {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #0078D4;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.profile-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
 .app-container {
   display: flex;
   height: 100vh;
   padding-top: 32px;
   box-sizing: border-box;
+}
+
+.app-container.tray-mode {
+  padding-top: 32px;
 }
 
 .nav-sidebar {
@@ -118,17 +186,14 @@ html, body {
 }
 
 .main-content.tray-mode {
+  margin-top: 16px;
   background-color: transparent;
-  padding: 12px;
+  padding: 0px 12px 12px 12px;
   width: 100%;
   max-width: 320px;
   box-sizing: border-box;
-  /* border-radius: 7px;
-  -webkit-backdrop-filter: blur(30px);
-  backdrop-filter: blur(30px);
-  background:rgba(243,243,243,0.8);
-  background-blend-mode: color; */
-  border-radius: 7px;
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
   background: rgba(243, 243, 243, 0.90);
   background-blend-mode: normal, color, luminosity;
   -webkit-backdrop-filter: blur(30px);
@@ -146,7 +211,7 @@ html, body {
   padding: 16px;
   width: 100%;
   box-sizing: border-box;
-  max-width: 296px;
+  /* max-width: 296px; */
   margin: 0 auto;
 }
 

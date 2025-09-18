@@ -50,9 +50,8 @@ function createTrayWindow() {
     resizable: false,
     movable: false,
     show: false,
-    titleBarStyle: 'hidden',
     transparent: true,
-    backgroundColor: '#00000000',  
+    backgroundColor: '#00000000',
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false
