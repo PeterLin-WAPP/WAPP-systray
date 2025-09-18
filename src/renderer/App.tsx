@@ -24,42 +24,62 @@ const NavItem: React.FC<NavItemProps> = ({ icon, label, isActive, onClick }) => 
 
 export const App: React.FC = () => {
   const [activeNav, setActiveNav] = useState('devices');
-  const isTrayWindow = new URLSearchParams(window.location.search).get('mode') === 'tray';
+  const urlParams = new URLSearchParams(window.location.search);
+  const mode = urlParams.get('mode');
+  const isTrayWindow = mode === 'tray';
+  const isCloudPCWindow = mode === 'cloudpc';
 
   return (
     <>
-      {!isTrayWindow ? (
-        <div className="titlebar">
-          <div className="drag-region">
-            <div className="window-title">
-              <img src={appIcon} className="window-icon" alt="Windows App" />
-              <span>Windows App</span>
+      {/* Render titlebar only for main and tray windows, not Cloud PC */}
+      {!isCloudPCWindow && (
+        <>
+          {!isTrayWindow ? (
+            <div className="titlebar">
+              <div className="drag-region">
+                <div className="window-title">
+                  <img src={appIcon} className="window-icon" alt="Windows App" />
+                  <span>Windows App</span>
+                </div>
+              </div>
             </div>
+          ) : (
+            <div className="tray-titlebar">
+              <div className="window-title">
+                <img src={appIcon} className="window-icon" alt="Windows App" />
+                <span>Windows App</span>
+              </div>
+              <div className="tray-controls">
+                <button 
+                  className="tray-control-button"
+                  onClick={() => {
+                    // @ts-ignore (window.electron is injected)
+                    window.electron?.showMainWindow();
+                  }}
+                >
+                  <img src={expandIcon} alt="Expand" width="14" height="14" />
+                </button>
+                <div className="me-control">
+                  <img src={profileIcon} alt="Profile" className="profile-icon" />
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+      )}
+      
+      {/* Main content area */}
+      {isCloudPCWindow ? (
+        // Cloud PC Window Content
+        <div className="cloud-pc-container">
+          <div className="cloud-pc-content">
+            <h1>Cloud PC Session</h1>
+            <p>Cloud PC content will go here...</p>
           </div>
         </div>
       ) : (
-        <div className="tray-titlebar">
-          <div className="window-title">
-            <img src={appIcon} className="window-icon" alt="Windows App" />
-            <span>Windows App</span>
-          </div>
-          <div className="tray-controls">
-            <button 
-              className="tray-control-button"
-              onClick={() => {
-                // @ts-ignore (window.electron is injected)
-                window.electron?.showMainWindow();
-              }}
-            >
-              <img src={expandIcon} alt="Expand" width="14" height="14" />
-            </button>
-            <div className="me-control">
-              <img src={profileIcon} alt="Profile" className="profile-icon" />
-            </div>
-          </div>
-        </div>
-      )}
-      <div className={`app-container ${isTrayWindow ? 'tray-mode' : ''}`}>
+        // Main Window and Tray Window Content
+        <div className={`app-container ${isTrayWindow ? 'tray-mode' : ''}`}>
         {!isTrayWindow && (
           <nav className="nav-sidebar">
             <NavItem
@@ -88,7 +108,13 @@ export const App: React.FC = () => {
               <section className="resource-section">
                 <h2>Devices</h2>
                 <div className="device-cards">
-                  <div className="device-card">
+                  <div 
+                    className="device-card"
+                    onClick={() => {
+                      // @ts-ignore (window.electron is injected)
+                      window.electron?.openCloudPC();
+                    }}
+                  >
                     <div className="device-bg">
                       <img src={cpcWallpaper} alt="Device wallpaper" />
                     </div>
@@ -118,7 +144,8 @@ export const App: React.FC = () => {
             </div>
           )}
         </main>
-      </div>
+        </div>
+      )}
     </>
   );
 };

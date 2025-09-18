@@ -327,3 +327,33 @@ html, body {
   height: 40px;
   object-fit: contain;
 }
+
+/* Cloud PC Window Styles */
+.cloud-pc-container {
+  width: 100vw;
+  height: 100vh;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.cloud-pc-content {
+  text-align: center;
+  padding: 40px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.cloud-pc-content h1 {
+  font-size: 24px;
+  margin-bottom: 16px;
+  color: #333;
+}
+
+.cloud-pc-content p {
+  font-size: 16px;
+  color: #666;
+}

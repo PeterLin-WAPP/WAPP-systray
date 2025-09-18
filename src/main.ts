@@ -4,6 +4,7 @@ import * as path from 'path';
 let mainWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
 let trayWindow: BrowserWindow | null = null;
+let cloudPCWindow: BrowserWindow | null = null;
 
 function createMainWindow() {
   const iconPath = path.join(__dirname, '../assets/icon.png');
@@ -96,6 +97,45 @@ function createTray() {
   });
 }
 
+function createCloudPCWindow(): void {
+  const iconPath = path.join(__dirname, '../assets/CPCicon.png');
+  cloudPCWindow = new BrowserWindow({
+    width: 1200,
+    height: 800,
+    icon: iconPath,
+    title: 'Cloud PC',
+    titleBarStyle: 'hidden',
+    titleBarOverlay: {
+      color: '#f4f4f4',
+      symbolColor: '#000000',
+      height: 32
+    },
+    show: false,
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+      preload: path.join(__dirname, 'preload.js')
+    },
+  });
+
+  if (process.platform === 'win32') {
+    cloudPCWindow.setIcon(iconPath);
+  }
+
+  // For now, load a blank page or the main content
+  if (process.env.NODE_ENV === 'development') {
+    cloudPCWindow.loadURL('http://localhost:4001?mode=cloudpc');
+  } else {
+    cloudPCWindow.loadFile(path.join(__dirname, '../dist/index.html'), {
+      query: { mode: 'cloudpc' }
+    });
+  }
+
+  cloudPCWindow.on('closed', () => {
+    cloudPCWindow = null;
+  });
+}
+
 app.whenReady().then(() => {
   createMainWindow();
   createTray();
@@ -121,5 +161,19 @@ ipcMain.on('show-main-window', () => {
     mainWindow.focus();
   } else {
     createMainWindow();
+  }
+});
+
+// Handle opening Cloud PC window
+ipcMain.on('open-cloud-pc', () => {
+  if (cloudPCWindow && !cloudPCWindow.isDestroyed()) {
+    cloudPCWindow.show();
+    cloudPCWindow.focus();
+  } else {
+    createCloudPCWindow();
+    if (cloudPCWindow) {
+      cloudPCWindow.show();
+      cloudPCWindow.focus();
+    }
   }
 });

@@ -5,6 +5,7 @@ import { contextBridge, ipcRenderer } from 'electron';
 contextBridge.exposeInMainWorld(
   'electron',
   {
-    showMainWindow: () => ipcRenderer.send('show-main-window')
+    showMainWindow: () => ipcRenderer.send('show-main-window'),
+    openCloudPC: () => ipcRenderer.send('open-cloud-pc')
   }
 );
