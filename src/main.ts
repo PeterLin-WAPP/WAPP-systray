@@ -51,12 +51,8 @@ function createTrayWindow() {
     movable: false,
     show: false,
     titleBarStyle: 'hidden',
-    titleBarOverlay: {
-      color: '#f4f4f4',
-      symbolColor: '#000000',
-      height: 32
-    },
-    backgroundColor: '#f4f4f4',
+    transparent: true,
+    backgroundColor: '#00000000',  
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false
@@ -67,7 +63,7 @@ function createTrayWindow() {
     const windowBounds = trayWindow.getBounds();
     // Position window centered above the tray icon
     const x = Math.round(trayBounds.x + (trayBounds.width / 2) - (windowBounds.width / 2));
-    const y = trayBounds.y - windowBounds.height - 36; // 36px gap above tray icon
+    const y = trayBounds.y - windowBounds.height - 28; // 28px gap above tray icon
     trayWindow.setPosition(x, y);
   }
 

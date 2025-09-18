@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import './styles.css';
-// Import the icon using webpack's module system
+// Import images using webpack's module system
 const appIcon = require('../../assets/icon.ico');
+const cpcWallpaper = require('../../assets/CPCwallpaper.png');
+const app1Icon = require('../../assets/app1.png');
+const app2Icon = require('../../assets/app2.png');
 
 interface NavItemProps {
   icon: string;
@@ -57,17 +60,32 @@ export const App: React.FC = () => {
         <main className={`main-content ${isTrayWindow ? 'tray-mode' : ''}`}>
           {isTrayWindow ? (
             <div className="tray-content">
-              <h2>Quick Actions</h2>
-              <div className="tray-actions">
-                <button className="tray-action">
-                  <i className="material-icons">phonelink_ring</i>
-                  <span>Connect Device</span>
-                </button>
-                <button className="tray-action">
-                  <i className="material-icons">settings</i>
-                  <span>Settings</span>
-                </button>
-              </div>
+              <section className="resource-section">
+                <h2>Devices</h2>
+                <div className="device-cards">
+                  <div className="device-card">
+                    <div className="device-bg">
+                      <img src={cpcWallpaper} alt="Device wallpaper" />
+                    </div>
+                    <div className="device-info">
+                      <h3>Cloud PC</h3>
+                      <p>8vCPU | 56GB | 1024GB</p>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              
+              <section className="resource-section">
+                <h2>Apps</h2>
+                <div className="app-cards">
+                  <div className="app-card">
+                    <img src={app1Icon} alt="App 1" className="app-icon" />
+                  </div>
+                  <div className="app-card">
+                    <img src={app2Icon} alt="App 2" className="app-icon" />
+                  </div>
+                </div>
+              </section>
             </div>
           ) : (
             <div>
