@@ -53,6 +53,7 @@ function createTrayWindow() {
     show: false,
     transparent: true,
     backgroundColor: '#00000000',
+    alwaysOnTop: true,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -64,7 +65,7 @@ function createTrayWindow() {
     const windowBounds = trayWindow.getBounds();
     // Position window centered above the tray icon
     const x = Math.round(trayBounds.x + (trayBounds.width / 2) - (windowBounds.width / 2));
-    const y = trayBounds.y - windowBounds.height - 28; // 28px gap above tray icon
+    const y = trayBounds.y - windowBounds.height - 80; // 80px gap above tray icon
     trayWindow.setPosition(x, y);
   }
 
