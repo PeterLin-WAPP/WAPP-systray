@@ -1,10 +1,14 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = {
   mode: 'development',
   entry: './src/renderer/index.tsx',
-  target: 'electron-renderer',
+  target: 'web',
+  externals: {
+    'electron': 'commonjs electron'
+  },
   devtool: 'source-map',
   devServer: {
     static: {
@@ -18,6 +22,12 @@ module.exports = {
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
+    fallback: {
+      'path': require.resolve('path-browserify'),
+      'util': require.resolve('util/'),
+      'stream': require.resolve('stream-browserify'),
+      'events': require.resolve('events/')
+    }
   },
   module: {
     rules: [
@@ -39,6 +49,10 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src', 'renderer', 'index.html'),
+    }),
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
+      Buffer: ['buffer', 'Buffer'],
     }),
   ],
 };

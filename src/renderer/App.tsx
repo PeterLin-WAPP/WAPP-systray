@@ -46,6 +46,10 @@ export const App: React.FC = () => {
           <div className="tray-controls">
             <button 
               className="tray-control-button"
+              onClick={() => {
+                // @ts-ignore (window.electron is injected)
+                window.electron?.showMainWindow();
+              }}
             >
               <img src={expandIcon} alt="Expand" width="14" height="14" />
             </button>

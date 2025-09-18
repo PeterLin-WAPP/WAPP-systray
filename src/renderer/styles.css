@@ -208,11 +208,14 @@ html, body {
 }
 
 .tray-content {
-  padding: 16px;
+  padding: 12px;
   width: 100%;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: auto;
   /* max-width: 296px; */
-  margin: 0 auto;
+  /* margin: 0 auto; */
 }
 
 .resource-section {

@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Tray, screen } from 'electron';
+import { app, BrowserWindow, Tray, screen, ipcMain } from 'electron';
 import * as path from 'path';
 
 let mainWindow: BrowserWindow | null = null;
@@ -20,8 +20,9 @@ function createMainWindow() {
     },
     backgroundColor: '#f4f4f4',
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false
+      nodeIntegration: false,
+      contextIsolation: true,
+      preload: path.join(__dirname, 'preload.js')
     },
   });
 
@@ -53,8 +54,9 @@ function createTrayWindow() {
     transparent: true,
     backgroundColor: '#00000000',
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false
+      nodeIntegration: false,
+      contextIsolation: true,
+      preload: path.join(__dirname, 'preload.js')
     },
   });
 
@@ -107,6 +109,16 @@ app.on('window-all-closed', () => {
 
 app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
+    createMainWindow();
+  }
+});
+
+// Handle showing the main window from tray
+ipcMain.on('show-main-window', () => {
+  if (mainWindow) {
+    mainWindow.show();
+    mainWindow.focus();
+  } else {
     createMainWindow();
   }
 });
