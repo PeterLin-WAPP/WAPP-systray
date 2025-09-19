@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './styles.css';
 // Import images using webpack's module system
 const appIcon = require('../../assets/icon.ico');
@@ -26,10 +26,27 @@ const NavItem: React.FC<NavItemProps> = ({ icon, label, isActive, onClick }) => 
 
 export const App: React.FC = () => {
   const [activeNav, setActiveNav] = useState('devices');
+  const [isCloudPCConnected, setIsCloudPCConnected] = useState(false);
   const urlParams = new URLSearchParams(window.location.search);
   const mode = urlParams.get('mode');
   const isTrayWindow = mode === 'tray';
   const isCloudPCWindow = mode === 'cloudpc';
+
+  useEffect(() => {
+    if (isTrayWindow) {
+      // Listen for Cloud PC disconnection
+      // @ts-ignore (window.electron is injected)
+      const removeListener = window.electron?.onCloudPCDisconnected(() => {
+        setIsCloudPCConnected(false);
+      });
+
+      return () => {
+        if (removeListener) {
+          removeListener();
+        }
+      };
+    }
+  }, [isTrayWindow]);
 
   return (
     <>
@@ -110,8 +127,9 @@ export const App: React.FC = () => {
                 <h2>Devices</h2>
                 <div className="device-cards">
                   <div 
-                    className="device-card"
+                    className={`device-card ${isCloudPCConnected ? 'connected' : ''}`}
                     onClick={() => {
+                      setIsCloudPCConnected(true);
                       // @ts-ignore (window.electron is injected)
                       window.electron?.openCloudPC();
                     }}
@@ -121,7 +139,7 @@ export const App: React.FC = () => {
                     </div>
                     <div className="device-info">
                       <h3>Cloud PC</h3>
-                      <p>8vCPU | 56GB | 1024GB</p>
+                      <p>{isCloudPCConnected ? 'Connected' : '8vCPU | 56GB | 1024GB'}</p>
                     </div>
                   </div>
                 </div>

@@ -134,6 +134,10 @@ function createCloudPCWindow(): void {
 
   cloudPCWindow.on('closed', () => {
     cloudPCWindow = null;
+    // Notify tray window that Cloud PC is disconnected
+    if (trayWindow && !trayWindow.isDestroyed()) {
+      trayWindow.webContents.send('cloud-pc-disconnected');
+    }
   });
 }
 
