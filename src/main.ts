@@ -38,6 +38,10 @@ function createMainWindow() {
   } else {
     mainWindow.loadFile(path.join(__dirname, '../dist/index.html'));
   }
+
+  mainWindow.on('closed', () => {
+    mainWindow = null;
+  });
 }
 
 function createTrayWindow() {
@@ -46,7 +50,7 @@ function createTrayWindow() {
 
   trayWindow = new BrowserWindow({
     width: 320,
-    height: 480,
+    height: 456,
     frame: false,
     skipTaskbar: true,
     resizable: false,
@@ -66,7 +70,7 @@ function createTrayWindow() {
     const windowBounds = trayWindow.getBounds();
     // Position window centered above the tray icon
     const x = Math.round(trayBounds.x + (trayBounds.width / 2) - (windowBounds.width / 2));
-    const y = trayBounds.y - windowBounds.height - 80; // 80px gap above tray icon
+    const y = trayBounds.y - windowBounds.height - 60; // 60px gap above tray icon
     trayWindow.setPosition(x, y);
   }
 
@@ -101,7 +105,7 @@ function createCloudPCWindow(): void {
   const iconPath = path.join(__dirname, '../assets/CPCicon.png');
   cloudPCWindow = new BrowserWindow({
     width: 1200,
-    height: 800,
+    height: 900,
     icon: iconPath,
     title: 'Cloud PC',
     autoHideMenuBar: true,
@@ -161,11 +165,15 @@ app.on('activate', () => {
 
 // Handle showing the main window from tray
 ipcMain.on('show-main-window', () => {
-  if (mainWindow) {
+  if (mainWindow && !mainWindow.isDestroyed()) {
     mainWindow.show();
     mainWindow.focus();
   } else {
     createMainWindow();
+    if (mainWindow) {
+      mainWindow.show();
+      mainWindow.focus();
+    }
   }
 });
 
@@ -197,8 +205,13 @@ ipcMain.on('open-file-upload', async (event) => {
 
     if (!result.canceled) {
       console.log('Files selected:', result.filePaths);
-      // For prototype purposes, just log the selected files
+      // Send to both tray window (for logging) and Cloud PC window (for toast)
       event.reply('files-selected', result.filePaths);
+      
+      // Also send to Cloud PC window if it exists
+      if (cloudPCWindow && !cloudPCWindow.isDestroyed()) {
+        cloudPCWindow.webContents.send('files-selected', result.filePaths);
+      }
     }
   } catch (error) {
     console.error('File upload error:', error);

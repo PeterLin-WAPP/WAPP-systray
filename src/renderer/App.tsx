@@ -6,6 +6,7 @@ const expandIcon = require('../../assets/expand.svg');
 const profileIcon = require('../../assets/profile.png');
 const cpcWallpaper = require('../../assets/CPCwallpaper.png');
 const cpcLoadingBackground = require('../../assets/CPCloadingbackground.png');
+const cpcSession = require('../../assets/CPCsession.png');
 const wappLoader = require('../../assets/WAPPloader.svg');
 const app1Icon = require('../../assets/app1.png');
 const app2Icon = require('../../assets/app2.png');
@@ -29,10 +30,24 @@ const NavItem: React.FC<NavItemProps> = ({ icon, label, isActive, onClick }) => 
 export const App: React.FC = () => {
   const [activeNav, setActiveNav] = useState('devices');
   const [isCloudPCConnected, setIsCloudPCConnected] = useState(false);
+  const [isLoaderVisible, setIsLoaderVisible] = useState(true);
+  const [showSession, setShowSession] = useState(false);
+  const [toastVisible, setToastVisible] = useState(false);
+  const [toastDismissing, setToastDismissing] = useState(false);
+  const [uploadedFileName, setUploadedFileName] = useState('');
   const urlParams = new URLSearchParams(window.location.search);
   const mode = urlParams.get('mode');
   const isTrayWindow = mode === 'tray';
   const isCloudPCWindow = mode === 'cloudpc';
+
+  // Toast dismiss function with animation
+  const dismissToast = () => {
+    setToastDismissing(true);
+    setTimeout(() => {
+      setToastVisible(false);
+      setToastDismissing(false);
+    }, 300); // Match CSS animation duration
+  };
 
   useEffect(() => {
     if (isTrayWindow) {
@@ -59,6 +74,46 @@ export const App: React.FC = () => {
       };
     }
   }, [isTrayWindow]);
+
+  // Cloud PC loading sequence
+  useEffect(() => {
+    if (isCloudPCWindow) {
+      // After loader appears (600ms) + 2000ms delay = transition at 2600ms total
+      const timer = setTimeout(() => {
+        setIsLoaderVisible(false);
+        // Small delay before showing session to allow loader fade-out
+        setTimeout(() => {
+          setShowSession(true);
+        }, 500);
+      }, 2000);
+
+      // Listen for file uploads in Cloud PC window
+      // @ts-ignore (window.electron is injected)
+      const removeFileListener = window.electron?.onFilesSelected((filePaths: string[]) => {
+        if (filePaths.length > 0) {
+          const fileName = filePaths[0].split('\\').pop() || filePaths[0].split('/').pop() || 'Unknown file';
+          setUploadedFileName(fileName);
+          setToastVisible(true);
+          setToastDismissing(false);
+          
+          // Auto-dismiss after 5 seconds
+          const autoTimer = setTimeout(() => {
+            dismissToast();
+          }, 5000);
+          
+          // Store timer to clear if manually dismissed
+          return () => clearTimeout(autoTimer);
+        }
+      });
+
+      return () => {
+        clearTimeout(timer);
+        if (removeFileListener) {
+          removeFileListener();
+        }
+      };
+    }
+  }, [isCloudPCWindow]);
 
   return (
     <>
@@ -102,10 +157,35 @@ export const App: React.FC = () => {
       {/* Main content area */}
       {isCloudPCWindow ? (
         // Cloud PC Window Content
-        <div className="cloud-pc-container">
-          <div className="cloud-pc-loader">
-            <img src={wappLoader} alt="Loading" className="loader-icon" />
-          </div>
+        <div className={`cloud-pc-container ${showSession ? 'session-mode' : ''}`}>
+          {isLoaderVisible && (
+            <div className="cloud-pc-loader">
+              <img src={wappLoader} alt="Loading" className="loader-icon" />
+            </div>
+          )}
+          
+          {/* Toast Notification */}
+          {toastVisible && (
+            <div className={`toast-notification ${toastDismissing ? 'dismissing' : ''}`}>
+              <div className="toast-header">
+                <div className="toast-title">
+                  <img src={appIcon} className="toast-icon" alt="Windows App" />
+                  <span>Windows App</span>
+                </div>
+                <button 
+                  className="toast-close"
+                  onClick={dismissToast}
+                >
+                  ×
+                </button>
+              </div>
+              <div className="toast-content">
+                <h3>File uploaded</h3>
+                <p>Upload complete. {uploadedFileName} is now on \This PC\Windows365 virtual drive\Downloads.</p>
+                <button className="toast-button">Go to file location</button>
+              </div>
+            </div>
+          )}
         </div>
       ) : (
         // Main Window and Tray Window Content
