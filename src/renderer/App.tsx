@@ -9,6 +9,8 @@ const cpcLoadingBackground = require('../../assets/CPCloadingbackground.png');
 const wappLoader = require('../../assets/WAPPloader.svg');
 const app1Icon = require('../../assets/app1.png');
 const app2Icon = require('../../assets/app2.png');
+const actionButtonUpload = require('../../assets/action-button-upload.png');
+const actionButtonCopilot = require('../../assets/action-button-copilot.png');
 
 interface NavItemProps {
   icon: string;
@@ -40,9 +42,19 @@ export const App: React.FC = () => {
         setIsCloudPCConnected(false);
       });
 
+      // Listen for file selection (prototype logging)
+      // @ts-ignore (window.electron is injected)
+      const removeFileListener = window.electron?.onFilesSelected((filePaths: string[]) => {
+        console.log('Files selected for upload:', filePaths);
+        // In a real app, you'd handle the file paths here
+      });
+
       return () => {
         if (removeListener) {
           removeListener();
+        }
+        if (removeFileListener) {
+          removeFileListener();
         }
       };
     }
@@ -140,6 +152,25 @@ export const App: React.FC = () => {
                     <div className="device-info">
                       <h3>Cloud PC</h3>
                       <p>{isCloudPCConnected ? 'Connected' : '8vCPU | 56GB | 1024GB'}</p>
+                      {isCloudPCConnected && (
+                        <div className="action-buttons">
+                          <button className="action-button" onClick={(e) => {
+                            e.stopPropagation();
+                            // @ts-ignore (window.electron is injected)
+                            window.electron?.openFileUpload();
+                          }}>
+                            <img src={actionButtonUpload} alt="Upload" className="action-icon" />
+                            <span className="action-text">Upload files</span>
+                          </button>
+                          <button className="action-button" onClick={(e) => {
+                            e.stopPropagation();
+                            // Handle copilot mode action
+                          }}>
+                            <img src={actionButtonCopilot} alt="Copilot" className="action-icon" />
+                            <span className="action-text">Copilot mode</span>
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

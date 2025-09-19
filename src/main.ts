@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Tray, screen, ipcMain } from 'electron';
+import { app, BrowserWindow, Tray, screen, ipcMain, dialog } from 'electron';
 import * as path from 'path';
 
 let mainWindow: BrowserWindow | null = null;
@@ -180,5 +180,27 @@ ipcMain.on('open-cloud-pc', () => {
       cloudPCWindow.show();
       cloudPCWindow.focus();
     }
+  }
+});
+
+// Handle file upload dialog
+ipcMain.on('open-file-upload', async (event) => {
+  try {
+    const result = await dialog.showOpenDialog({
+      properties: ['openFile', 'multiSelections'],
+      filters: [
+        { name: 'All Files', extensions: ['*'] },
+        { name: 'Images', extensions: ['jpg', 'png', 'gif', 'bmp'] },
+        { name: 'Documents', extensions: ['pdf', 'doc', 'docx', 'txt'] }
+      ]
+    });
+
+    if (!result.canceled) {
+      console.log('Files selected:', result.filePaths);
+      // For prototype purposes, just log the selected files
+      event.reply('files-selected', result.filePaths);
+    }
+  } catch (error) {
+    console.error('File upload error:', error);
   }
 });
