@@ -104,12 +104,13 @@ function createCloudPCWindow(): void {
     height: 800,
     icon: iconPath,
     title: 'Cloud PC',
-    titleBarStyle: 'hidden',
-    titleBarOverlay: {
-      color: '#f4f4f4',
-      symbolColor: '#000000',
-      height: 32
-    },
+    autoHideMenuBar: true,
+    // titleBarStyle: 'hidden',
+    // titleBarOverlay: {
+    //   color: '#f4f4f4',
+    //   symbolColor: '#000000',
+    //   height: 32
+    // },
     show: false,
     webPreferences: {
       nodeIntegration: false,

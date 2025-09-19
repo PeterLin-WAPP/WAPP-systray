@@ -5,6 +5,8 @@ const appIcon = require('../../assets/icon.ico');
 const expandIcon = require('../../assets/expand.svg');
 const profileIcon = require('../../assets/profile.png');
 const cpcWallpaper = require('../../assets/CPCwallpaper.png');
+const cpcLoadingBackground = require('../../assets/CPCloadingbackground.png');
+const wappLoader = require('../../assets/WAPPloader.svg');
 const app1Icon = require('../../assets/app1.png');
 const app2Icon = require('../../assets/app2.png');
 
@@ -72,9 +74,8 @@ export const App: React.FC = () => {
       {isCloudPCWindow ? (
         // Cloud PC Window Content
         <div className="cloud-pc-container">
-          <div className="cloud-pc-content">
-            <h1>Cloud PC Session</h1>
-            <p>Cloud PC content will go here...</p>
+          <div className="cloud-pc-loader">
+            <img src={wappLoader} alt="Loading" className="loader-icon" />
           </div>
         </div>
       ) : (
