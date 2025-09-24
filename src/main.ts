@@ -1,10 +1,11 @@
-import { app, BrowserWindow, Tray, screen, ipcMain, dialog } from 'electron';
+import { app, BrowserWindow, Tray, screen, ipcMain, dialog, Menu } from 'electron';
 import * as path from 'path';
 
 let mainWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
 let trayWindow: BrowserWindow | null = null;
 let cloudPCWindow: BrowserWindow | null = null;
+let trayWindowPosition: { x: number, y: number } | null = null;
 
 function createMainWindow() {
   const iconPath = path.join(__dirname, '../assets/icon.png');
@@ -46,7 +47,6 @@ function createMainWindow() {
 
 function createTrayWindow() {
   const display = screen.getPrimaryDisplay();
-  const trayBounds = tray?.getBounds();
 
   trayWindow = new BrowserWindow({
     width: 320,
@@ -56,8 +56,8 @@ function createTrayWindow() {
     resizable: false,
     movable: false,
     show: false,
-    transparent: true,
-    backgroundColor: '#00000000',
+    // transparent: true,
+    // backgroundColor: '#00000000',
     alwaysOnTop: true,
     webPreferences: {
       nodeIntegration: false,
@@ -65,14 +65,6 @@ function createTrayWindow() {
       preload: path.join(__dirname, 'preload.js')
     },
   });
-
-  if (trayBounds) {
-    const windowBounds = trayWindow.getBounds();
-    // Position window centered above the tray icon
-    const x = Math.round(trayBounds.x + (trayBounds.width / 2) - (windowBounds.width / 2));
-    const y = trayBounds.y - windowBounds.height - 60; // 60px gap above tray icon
-    trayWindow.setPosition(x, y);
-  }
 
   if (process.env.NODE_ENV === 'development') {
     trayWindow.loadURL('http://localhost:4001?mode=tray');
@@ -87,24 +79,116 @@ function createTrayWindow() {
   });
 }
 
+function positionTrayWindow() {
+  if (!trayWindow || !tray) return;
+
+  // Only calculate position if we don't have one stored yet
+  if (!trayWindowPosition) {
+    const display = screen.getPrimaryDisplay();
+    const trayBounds = tray.getBounds();
+    const windowBounds = trayWindow.getBounds();
+    
+    // Calculate position based on tray center (not cursor position)
+    let x = trayBounds.x + (trayBounds.width / 2) - (windowBounds.width / 2);
+    let y = trayBounds.y - windowBounds.height - 10; // 10px gap above tray
+
+    // Ensure window stays within screen bounds
+    const screenBounds = display.workArea;
+    
+    // Adjust X position if window would go off screen
+    if (x < screenBounds.x) {
+      x = screenBounds.x + 10;
+    } else if (x + windowBounds.width > screenBounds.x + screenBounds.width) {
+      x = screenBounds.x + screenBounds.width - windowBounds.width - 10;
+    }
+    
+    // Adjust Y position if window would go off screen (show below tray instead)
+    if (y < screenBounds.y) {
+      y = trayBounds.y + trayBounds.height + 10;
+    }
+
+    // Store the calculated position
+    trayWindowPosition = { x: Math.round(x), y: Math.round(y) };
+  }
+
+  // Always use the stored position
+  trayWindow.setPosition(trayWindowPosition.x, trayWindowPosition.y);
+}
+
 function createTray() {
   const iconPath = path.join(__dirname, '../assets/icon.ico');
   tray = new Tray(iconPath);
   tray.setToolTip('Windows App');
 
+  // Function to update context menu based on Cloud PC state
+  const updateContextMenu = () => {
+    const isCloudPCRunning = cloudPCWindow && !cloudPCWindow.isDestroyed();
+    
+    const contextMenu = Menu.buildFromTemplate([
+      {
+        label: 'Connect to the last session',
+        click: () => {
+          if (cloudPCWindow && !cloudPCWindow.isDestroyed()) {
+            cloudPCWindow.show();
+            cloudPCWindow.focus();
+          } else {
+            createCloudPCWindow();
+            if (cloudPCWindow) {
+              cloudPCWindow.show();
+              cloudPCWindow.focus();
+            }
+          }
+          // Update menu after action
+          setTimeout(updateContextMenu, 100);
+        }
+      },
+      {
+        label: 'Disconnect all sessions',
+        enabled: !!isCloudPCRunning,
+        click: () => {
+          if (cloudPCWindow && !cloudPCWindow.isDestroyed()) {
+            cloudPCWindow.close();
+          }
+        }
+      },
+      {
+        type: 'separator'
+      },
+      {
+        label: 'Exit',
+        click: () => {
+          app.quit();
+        }
+      }
+    ]);
+
+    if (tray) {
+      tray.setContextMenu(contextMenu);
+    }
+  };
+
+  // Initial context menu setup
+  updateContextMenu();
+
   tray.on('click', () => {
     if (trayWindow?.isVisible()) {
       trayWindow.hide();
+      // Keep stored position - don't reset it
     } else {
+      // Position window (only calculates on first time)
+      positionTrayWindow();
       trayWindow?.show();
     }
   });
+
+  // Store reference to update function for use in Cloud PC window creation
+  (global as any).updateTrayContextMenu = updateContextMenu;
 }
 
 function createCloudPCWindow(): void {
   const iconPath = path.join(__dirname, '../assets/CPCicon.png');
   cloudPCWindow = new BrowserWindow({
-    width: 1200,
+    width: 1400,
     height: 900,
     icon: iconPath,
     title: 'Cloud PC',
@@ -142,7 +226,16 @@ function createCloudPCWindow(): void {
     if (trayWindow && !trayWindow.isDestroyed()) {
       trayWindow.webContents.send('cloud-pc-disconnected');
     }
+    // Update tray context menu to reflect disconnection
+    if ((global as any).updateTrayContextMenu) {
+      (global as any).updateTrayContextMenu();
+    }
   });
+
+  // Update tray context menu to reflect connection
+  if ((global as any).updateTrayContextMenu) {
+    setTimeout(() => (global as any).updateTrayContextMenu(), 100);
+  }
 }
 
 app.whenReady().then(() => {

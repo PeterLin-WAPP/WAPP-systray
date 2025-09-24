@@ -1,6 +1,7 @@
 {
   "name": "windows-app",
   "version": "1.0.0",
+  "description": "Windows App System Tray Application with Cloud PC Integration",
   "main": "dist/main.js",
   "scripts": {
     "start": "concurrently \"npm run start:renderer\" \"npm run start:main\"",
@@ -8,40 +9,46 @@
     "start:renderer": "webpack serve --mode development",
     "build": "webpack --mode production && tsc -p tsconfig.main.json",
     "dist": "npm run build && electron-builder",
+    "dist:win": "npm run build && electron-builder --win",
+    "pack": "npm run build && electron-builder --dir",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
-    "electron": "^38.1.2",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
   "build": {
-    "appId": "com.yourcompany.windowsapp",
+    "appId": "com.wapp.systray",
     "productName": "Windows App",
     "directories": {
-      "output": "dist-electron"
+      "output": "dist-installer"
     },
+    "files": [
+      "dist/**/*",
+      "assets/**/*",
+      "node_modules/**/*"
+    ],
     "win": {
-      "icon": "assets/icon.png",
+      "icon": "assets/icon.ico",
       "target": [
-        "nsis"
-      ]
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "forceCodeSigning": false,
+      "verifyUpdateCodeSignature": false
     },
-    "mac": {
-      "icon": "assets/icon.icns",
-      "target": [
-        "dmg"
-      ]
-    },
-    "linux": {
-      "icon": "assets/icon.png",
-      "target": [
-        "AppImage"
-      ]
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "assets/icon.ico",
+      "uninstallerIcon": "assets/icon.ico",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
     }
   },
   "devDependencies": {
@@ -52,6 +59,8 @@
     "concurrently": "^9.2.1",
     "cross-env": "^10.0.0",
     "css-loader": "^7.1.2",
+    "electron": "^38.1.2",
+    "electron-builder": "^26.0.12",
     "events": "^3.3.0",
     "html-webpack-plugin": "^5.6.4",
     "path-browserify": "^1.0.1",

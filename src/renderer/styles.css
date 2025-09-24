@@ -9,7 +9,7 @@ html, body {
 
 .titlebar {
   height: 32px;
-  background: #f4f4f4;
+  background: #f5f5f5;
   user-select: none;
   display: flex;
   position: fixed;
@@ -32,7 +32,7 @@ html, body {
   padding-left: 16px;
   padding-top: 16px;
   padding-right: 16px;
-  background: rgba(243, 243, 243, 0.90);
+  background: rgba(243, 243, 243, 0.95);
   background-blend-mode: normal, color, luminosity;
   -webkit-backdrop-filter: blur(30px);
   backdrop-filter: blur(30px);
@@ -136,7 +136,7 @@ html, body {
 
 .nav-sidebar {
   width: 72px;
-  background-color: #f4f4f4;
+  background-color: #f5f5f5;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -187,7 +187,7 @@ html, body {
 
 .main-content.tray-mode {
   margin-top: 16px;
-  background-color: transparent;
+  /* background-color: transparent; */
   padding: 0px 12px 12px 12px;
   width: 100%;
   max-width: 320px;
@@ -198,6 +198,8 @@ html, body {
   background-blend-mode: normal, color, luminosity;
   -webkit-backdrop-filter: blur(30px);
   backdrop-filter: blur(30px);
+  box-shadow: 0 2px 21px rgba(0, 0, 0, 0.15),
+              0 32px 64px rgba(0, 0, 0, 0.19);
 }
 
 .app-container.tray-mode {
@@ -417,31 +419,90 @@ html, body {
 .cloud-pc-container {
   width: 100vw;
   height: 100vh;
-  background-image: url('../../assets/CPCloadingbackground.png');
-  background-size: cover;
-  background-position: bottom;
-  background-repeat: no-repeat;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: 'Segoe UI', system-ui, sans-serif;
-  transition: background-image 0.8s ease-in-out;
+  position: relative;
+  overflow: hidden;
 }
 
-.cloud-pc-container.session-mode {
-  background-image: url('../../assets/CPCsession.png');
-  background-position: center top;
+.cloud-pc-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../../assets/CPCloadingbackground.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1;
+  transition: opacity 0.8s ease-in-out;
+  z-index: -2;
+}
+
+.cloud-pc-container.session-mode::after {
+  opacity: 0;
+}
+
+.cloud-pc-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../../assets/CPCwallpaper2.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+  z-index: -1;
+}
+
+.cloud-pc-container.session-mode::before {
+  opacity: 1;
+}
+
+.cloud-pc-container.session-mode::after {
+  opacity: 0;
+}
+
+.cloud-pc-taskbar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 32px;
+  background-image: url('../../assets/CPCtaskbar.png');
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+  z-index: 1;
+}
+
+.cloud-pc-container.session-mode .cloud-pc-taskbar {
+  opacity: 1;
 }
 
 .cloud-pc-loader {
+  position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.5s ease-out;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
-.cloud-pc-loader.fade-out {
-  opacity: 0;
+.cloud-pc-loader.moved-left {
+  transform: translate(calc(-50% - 64px), -50%);
 }
 
 .loader-icon {
@@ -449,7 +510,48 @@ html, body {
   height: 64px;
   opacity: 0;
   transform: scale(0.8) translateY(10px);
-  animation: fadeInLoader 0.6s ease-out 0.3s forwards;
+  transition: all 0.3s ease-out;
+}
+
+.loader-icon.visible {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  transition: all 0.3s ease-out;
+}
+
+.loader-icon.fade-out {
+  opacity: 0;
+  transform: scale(0.8) translateY(10px);
+  transition: all 0.3s ease-out;
+}
+
+.cloud-pc-loader-branded {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(calc(-50% + 128px), -50%) scale(0.5);
+  opacity: 0;
+  transition: all 0.3s ease-out;
+}
+
+.cloud-pc-loader-branded.visible {
+  opacity: 1;
+  transform: translate(calc(-50% + 128px), -50%) scale(1);
+  transition: all 0.3s ease-out;
+}
+
+.cloud-pc-loader-branded.fade-out {
+  opacity: 0;
+  transform: translate(calc(-50% + 128px), -50%) scale(0.5);
+  transition: all 0.3s ease-out;
+}
+
+.loader-branded-icon {
+  width: 78px;
+  height: 78px;
 }
 
 @keyframes fadeInLoader {
@@ -558,7 +660,7 @@ html, body {
 }
 
 .toast-button:hover {
-  background: #e3e3e3;
+  background: #eaeaea;
 }
 
 @keyframes slideInToast {

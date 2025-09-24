@@ -5,9 +5,12 @@ const appIcon = require('../../assets/icon.ico');
 const expandIcon = require('../../assets/expand.svg');
 const profileIcon = require('../../assets/profile.png');
 const cpcWallpaper = require('../../assets/CPCwallpaper.png');
+const cpcWallpaper2 = require('../../assets/CPCwallpaper2.png');
 const cpcLoadingBackground = require('../../assets/CPCloadingbackground.png');
+const cpcLoadingBranded = require('../../assets/CPCloadingBranded.png');
 const cpcSession = require('../../assets/CPCsession.png');
 const wappLoader = require('../../assets/WAPPloader.svg');
+const wappLoaderBranded = require('../../assets/WAPPloaderBranded.png');
 const app1Icon = require('../../assets/app1.png');
 const app2Icon = require('../../assets/app2.png');
 const actionButtonUpload = require('../../assets/action-button-upload.png');
@@ -30,7 +33,7 @@ const NavItem: React.FC<NavItemProps> = ({ icon, label, isActive, onClick }) => 
 export const App: React.FC = () => {
   const [activeNav, setActiveNav] = useState('devices');
   const [isCloudPCConnected, setIsCloudPCConnected] = useState(false);
-  const [isLoaderVisible, setIsLoaderVisible] = useState(true);
+  const [loadingStage, setLoadingStage] = useState(0); // 0: initial, 1: wappLoader rendered, 1.5: wappLoader visible, 2: wappLoader moved, 3: branded loader rendered, 3.5: branded loader visible, 4: loaders fade out, 5: session
   const [showSession, setShowSession] = useState(false);
   const [toastVisible, setToastVisible] = useState(false);
   const [toastDismissing, setToastDismissing] = useState(false);
@@ -78,14 +81,35 @@ export const App: React.FC = () => {
   // Cloud PC loading sequence
   useEffect(() => {
     if (isCloudPCWindow) {
-      // After loader appears (600ms) + 2000ms delay = transition at 2600ms total
-      const timer = setTimeout(() => {
-        setIsLoaderVisible(false);
-        // Small delay before showing session to allow loader fade-out
-        setTimeout(() => {
-          setShowSession(true);
-        }, 500);
-      }, 2000);
+      // Stage 1: After 800ms, render WAPPloader
+      const stage1Timer = setTimeout(() => {
+        setLoadingStage(1);
+        // Small delay to allow CSS transition to work
+        setTimeout(() => setLoadingStage(1.5), 50);
+      }, 800);
+
+      // Stage 2: After another 800ms, move WAPPloader (400ms duration)
+      const stage2Timer = setTimeout(() => {
+        setLoadingStage(2);
+      }, 1600); // 800 + 800
+
+      // Stage 3: After WAPPloader finishes moving, render branded loader
+      const stage3Timer = setTimeout(() => {
+        setLoadingStage(3);
+        // Small delay to allow CSS transition to work
+        setTimeout(() => setLoadingStage(3.5), 50);
+      }, 2000); // stage2 + 400ms movement
+
+      // Stage 4: After another 1000ms, fade out both loaders (300ms duration)
+      const stage4Timer = setTimeout(() => {
+        setLoadingStage(4);
+      }, 3300); // stage3 + 300ms branded fade-in + 1000ms delay
+
+      // Stage 5: After fade-out completes, show session wallpaper
+      const stage5Timer = setTimeout(() => {
+        setLoadingStage(5);
+        setShowSession(true);
+      }, 3600); // stage4 + 300ms fade-out
 
       // Listen for file uploads in Cloud PC window
       // @ts-ignore (window.electron is injected)
@@ -107,7 +131,11 @@ export const App: React.FC = () => {
       });
 
       return () => {
-        clearTimeout(timer);
+        clearTimeout(stage1Timer);
+        clearTimeout(stage2Timer);
+        clearTimeout(stage3Timer);
+        clearTimeout(stage4Timer);
+        clearTimeout(stage5Timer);
         if (removeFileListener) {
           removeFileListener();
         }
@@ -158,11 +186,24 @@ export const App: React.FC = () => {
       {isCloudPCWindow ? (
         // Cloud PC Window Content
         <div className={`cloud-pc-container ${showSession ? 'session-mode' : ''}`}>
-          {isLoaderVisible && (
-            <div className="cloud-pc-loader">
-              <img src={wappLoader} alt="Loading" className="loader-icon" />
+          {loadingStage >= 1 && loadingStage < 5 && (
+            <div className={`cloud-pc-loader ${loadingStage >= 2 ? 'moved-left' : ''}`}>
+              <img 
+                src={wappLoader} 
+                alt="Loading" 
+                className={`loader-icon ${loadingStage >= 1.5 ? 'visible' : ''} ${loadingStage >= 4 ? 'fade-out' : ''}`} 
+              />
             </div>
           )}
+          
+          {loadingStage >= 3 && loadingStage < 5 && (
+            <div className={`cloud-pc-loader-branded ${loadingStage >= 3.5 ? 'visible' : ''} ${loadingStage >= 4 ? 'fade-out' : ''}`}>
+              <img src={wappLoaderBranded} alt="Loading Branded" className="loader-branded-icon" />
+            </div>
+          )}
+          
+          {/* CPCtaskbar */}
+          <div className="cloud-pc-taskbar"></div>
           
           {/* Toast Notification */}
           {toastVisible && (
@@ -227,11 +268,11 @@ export const App: React.FC = () => {
                     }}
                   >
                     <div className="device-bg">
-                      <img src={cpcWallpaper} alt="Device wallpaper" />
+                      <img src={cpcWallpaper2} alt="Device wallpaper" />
                     </div>
                     <div className="device-info">
-                      <h3>Cloud PC</h3>
-                      <p>{isCloudPCConnected ? 'Connected' : '8vCPU | 56GB | 1024GB'}</p>
+                      <h3>Reserve Cloud PC</h3>
+                      <p>{isCloudPCConnected ? 'Connected' : 'Wells Fargo'}</p>
                       {isCloudPCConnected && (
                         <div className="action-buttons">
                           <button className="action-button" onClick={(e) => {
