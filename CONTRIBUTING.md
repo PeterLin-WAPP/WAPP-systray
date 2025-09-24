@@ -18,8 +18,9 @@ By participating in this project, you agree to maintain a respectful and inclusi
 1. Fork the repository
 2. Clone your fork:
    ```bash
-   git clone https://github.com/YourUsername/ReserveUX-CPConly.git
-   cd ReserveUX-CPConly
+   git clone https://github.com/YourUsername/WAPP-systray.git
+   cd WAPP-systray
+   git checkout reserveux-cpconly
    ```
 3. Install dependencies:
    ```bash

@@ -28,10 +28,13 @@ A sophisticated Cloud PC loading experience with smooth animations and transitio
 
 ```bash
 # Clone the repository
-git clone https://github.com/YourUsername/ReserveUX-CPConly.git
+git clone https://github.com/PeterLin-WAPP/WAPP-systray.git
 
 # Navigate to project directory
-cd ReserveUX-CPConly
+cd WAPP-systray
+
+# Switch to ReserveUX branch
+git checkout reserveux-cpconly
 
 # Install dependencies
 npm install

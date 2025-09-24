@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "Cloud PC loading experience with sophisticated animations",
   "main": "dist/main.js",
-  "homepage": "https://github.com/YourUsername/ReserveUX-CPConly",
+  "homepage": "https://github.com/PeterLin-WAPP/WAPP-systray/tree/reserveux-cpconly",
   "repository": {
     "type": "git",
-    "url": "https://github.com/YourUsername/ReserveUX-CPConly.git"
+    "url": "https://github.com/PeterLin-WAPP/WAPP-systray.git"
   },
   "scripts": {
     "start": "concurrently \"npm run start:renderer\" \"npm run start:main\"",
