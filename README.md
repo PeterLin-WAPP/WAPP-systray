@@ -76,7 +76,7 @@ src/
 ├── main.ts              # Electron main process
 └── assets/
     ├── CPCloadingbackground.png
-    ├── CPCwallpaper2.png
+    ├── CPCwallpaper.png
     ├── WAPPloader.svg
     ├── WAPPloaderBranded.png
     └── CPCtaskbar.png

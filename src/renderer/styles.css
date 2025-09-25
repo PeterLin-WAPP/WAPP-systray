@@ -187,9 +187,9 @@ html, body {
 
 .main-content.tray-mode {
   margin-top: 16px;
-  /* background-color: transparent; */
-  padding: 0px 12px 12px 12px;
+  padding: 0px 0px 24px 0px;
   width: 100%;
+  height: calc(100% - 16px);
   max-width: 320px;
   box-sizing: border-box;
   border-bottom-left-radius: 7px;
@@ -203,25 +203,24 @@ html, body {
 }
 
 .app-container.tray-mode {
-  height: 456px;
+  height: 320px;
   border-radius: 7px;
   overflow: hidden;
   background-color:transparent;
 }
 
 .tray-content {
-  padding: 12px;
+  padding: 16px;
   width: 100%;
+  height: 100%;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: auto;
-  /* max-width: 296px; */
-  /* margin: 0 auto; */
+  gap: 0;
 }
 
 .resource-section {
-  margin-bottom: 24px;
+  margin-bottom: 0px;
   height: 100%;
   width: 100%;
   box-sizing: border-box;
@@ -229,9 +228,23 @@ html, body {
 
 .resource-section h2 {
   font-size: 14px;
-  margin-bottom: 16px;
+  margin: 0;
   font-family: 'Segoe UI', system-ui, sans-serif;
   font-weight: 600;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  margin-left: 12px;
+}
+
+.company-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
 }
 
 .device-cards {
@@ -369,7 +382,7 @@ html, body {
 .device-info h3 {
   font-size: 16px;
   margin: 0 0 4px 0;
-  font-weight: 600;
+  font-weight: 500;
   font-family: 'Segoe UI', system-ui, sans-serif;
 }
 
@@ -454,7 +467,7 @@ html, body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('../../assets/CPCwallpaper2.png');
+  background-image: url('../../assets/CPCwallpaper.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -550,8 +563,8 @@ html, body {
 }
 
 .loader-branded-icon {
-  width: 78px;
-  height: 78px;
+  width: 72px;
+  height: 72px;
 }
 
 @keyframes fadeInLoader {

@@ -5,7 +5,6 @@ const appIcon = require('../../assets/icon.ico');
 const expandIcon = require('../../assets/expand.svg');
 const profileIcon = require('../../assets/profile.png');
 const cpcWallpaper = require('../../assets/CPCwallpaper.png');
-const cpcWallpaper2 = require('../../assets/CPCwallpaper2.png');
 const cpcLoadingBackground = require('../../assets/CPCloadingbackground.png');
 const cpcLoadingBranded = require('../../assets/CPCloadingBranded.png');
 const cpcSession = require('../../assets/CPCsession.png');
@@ -257,7 +256,10 @@ export const App: React.FC = () => {
           {isTrayWindow ? (
             <div className="tray-content">
               <section className="resource-section">
-                <h2>Devices</h2>
+                <div className="section-header">
+                  <img src={wappLoaderBranded} alt="Company Icon" className="company-icon" />
+                  <h2>Contoso</h2>
+                </div>
                 <div className="device-cards">
                   <div 
                     className={`device-card ${isCloudPCConnected ? 'connected' : ''}`}
@@ -268,11 +270,11 @@ export const App: React.FC = () => {
                     }}
                   >
                     <div className="device-bg">
-                      <img src={cpcWallpaper2} alt="Device wallpaper" />
+                      <img src={cpcWallpaper} alt="Device wallpaper" />
                     </div>
                     <div className="device-info">
                       <h3>Reserve Cloud PC</h3>
-                      <p>{isCloudPCConnected ? 'Connected' : 'Wells Fargo'}</p>
+                      <p>{isCloudPCConnected ? 'Connected' : 'Last connected today'}</p>
                       {isCloudPCConnected && (
                         <div className="action-buttons">
                           <button className="action-button" onClick={(e) => {
@@ -293,18 +295,6 @@ export const App: React.FC = () => {
                         </div>
                       )}
                     </div>
-                  </div>
-                </div>
-              </section>
-              
-              <section className="resource-section">
-                <h2>Apps</h2>
-                <div className="app-cards">
-                  <div className="app-card">
-                    <img src={app1Icon} alt="App 1" className="app-icon" />
-                  </div>
-                  <div className="app-card">
-                    <img src={app2Icon} alt="App 2" className="app-icon" />
                   </div>
                 </div>
               </section>

@@ -50,7 +50,7 @@ function createTrayWindow() {
 
   trayWindow = new BrowserWindow({
     width: 320,
-    height: 456,
+    height: 320,
     frame: false,
     skipTaskbar: true,
     resizable: false,
