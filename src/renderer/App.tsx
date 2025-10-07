@@ -10,21 +10,29 @@ const app1Icon = require('../../assets/icons/app1.png');
 const app2Icon = require('../../assets/icons/app2.png');
 const actionButtonUpload = require('../../assets/icons/action-button-upload.png');
 const actionButtonCopilot = require('../../assets/icons/action-button-copilot.png');
+// Navigation Icons
+const navStarActive = require('../../assets/icons/nav-star-active.svg');
+const navStarRest = require('../../assets/icons/nav-star-rest.svg');
+const navDevicesActive = require('../../assets/icons/nav-devices-active.svg');
+const navDevicesRest = require('../../assets/icons/nav-devices-rest.svg');
+const navAppActive = require('../../assets/icons/nav-app-active.svg');
+const navAppRest = require('../../assets/icons/nav-app-rest.svg');
 // Wallpapers
 const cpcWallpaper = require('../../assets/wallpapers/CPCwallpaper.png');
 const cpcLoadingBackground = require('../../assets/wallpapers/CPCloadingbackground.png');
 const cpcSession = require('../../assets/wallpapers/CPCsession.png');
 
 interface NavItemProps {
-  icon: string;
+  activeIcon: string;
+  restIcon: string;
   label: string;
   isActive: boolean;
   onClick: () => void;
 }
 
-const NavItem: React.FC<NavItemProps> = ({ icon, label, isActive, onClick }) => (
+const NavItem: React.FC<NavItemProps> = ({ activeIcon, restIcon, label, isActive, onClick }) => (
   <div className={`nav-item ${isActive ? 'active' : ''}`} onClick={onClick}>
-    <i className="material-icons icon">{icon}</i>
+    <img src={isActive ? activeIcon : restIcon} className="icon" alt={label} />
     <span className="label">{label}</span>
   </div>
 );
@@ -195,19 +203,22 @@ export const App: React.FC = () => {
         {!isTrayWindow && (
           <nav className="nav-sidebar">
             <NavItem
-              icon="star"
+              activeIcon={navStarActive}
+              restIcon={navStarRest}
               label="Favorites"
               isActive={activeNav === 'favorites'}
               onClick={() => setActiveNav('favorites')}
             />
             <NavItem
-              icon="devices"
+              activeIcon={navDevicesActive}
+              restIcon={navDevicesRest}
               label="Devices"
               isActive={activeNav === 'devices'}
               onClick={() => setActiveNav('devices')}
             />
             <NavItem
-              icon="apps"
+              activeIcon={navAppActive}
+              restIcon={navAppRest}
               label="Apps"
               isActive={activeNav === 'apps'}
               onClick={() => setActiveNav('apps')}

@@ -17,7 +17,7 @@ function createMainWindow() {
     titleBarOverlay: {
       color: '#f4f4f4',
       symbolColor: '#000000',
-      height: 32
+      height: 48
     },
     backgroundColor: '#f4f4f4',
     webPreferences: {
@@ -135,8 +135,8 @@ function createTray() {
 function createCloudPCWindow(): void {
   const iconPath = path.join(__dirname, '../assets/icons/CPCicon.png');
   cloudPCWindow = new BrowserWindow({
-    width: 1200,
-    height: 900,
+    width: 1024,
+    height: 768,
     icon: iconPath,
     title: 'Cloud PC',
     autoHideMenuBar: true,
