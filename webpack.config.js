@@ -14,7 +14,7 @@ module.exports = {
     static: {
       directory: path.join(__dirname, 'dist'),
     },
-    port: 4001,
+    port: 4003,
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

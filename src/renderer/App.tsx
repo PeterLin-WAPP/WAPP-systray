@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import './styles.css';
+import './styles/index.css';
 // Import images using webpack's module system
-const appIcon = require('../../assets/icon.ico');
-const expandIcon = require('../../assets/expand.svg');
-const profileIcon = require('../../assets/profile.png');
-const cpcWallpaper = require('../../assets/CPCwallpaper.png');
-const cpcLoadingBackground = require('../../assets/CPCloadingbackground.png');
-const cpcSession = require('../../assets/CPCsession.png');
-const wappLoader = require('../../assets/WAPPloader.svg');
-const app1Icon = require('../../assets/app1.png');
-const app2Icon = require('../../assets/app2.png');
-const actionButtonUpload = require('../../assets/action-button-upload.png');
-const actionButtonCopilot = require('../../assets/action-button-copilot.png');
+// Icons
+const appIcon = require('../../assets/icons/icon.ico');
+const expandIcon = require('../../assets/icons/expand.svg');
+const profileIcon = require('../../assets/icons/profile.png');
+const wappLoader = require('../../assets/icons/WAPPloader.svg');
+const app1Icon = require('../../assets/icons/app1.png');
+const app2Icon = require('../../assets/icons/app2.png');
+const actionButtonUpload = require('../../assets/icons/action-button-upload.png');
+const actionButtonCopilot = require('../../assets/icons/action-button-copilot.png');
+// Wallpapers
+const cpcWallpaper = require('../../assets/wallpapers/CPCwallpaper.png');
+const cpcLoadingBackground = require('../../assets/wallpapers/CPCloadingbackground.png');
+const cpcSession = require('../../assets/wallpapers/CPCsession.png');
 
 interface NavItemProps {
   icon: string;

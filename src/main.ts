@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Tray, screen, ipcMain, dialog } from 'electron';
+import { app, BrowserWindow, Tray, Menu, screen, ipcMain, dialog } from 'electron';
 import * as path from 'path';
 
 let mainWindow: BrowserWindow | null = null;
@@ -7,7 +7,7 @@ let trayWindow: BrowserWindow | null = null;
 let cloudPCWindow: BrowserWindow | null = null;
 
 function createMainWindow() {
-  const iconPath = path.join(__dirname, '../assets/icon.png');
+  const iconPath = path.join(__dirname, '../assets/icons/icon.png');
   mainWindow = new BrowserWindow({
     width: 1024,
     height: 768,
@@ -33,7 +33,7 @@ function createMainWindow() {
   }
 
   if (process.env.NODE_ENV === 'development') {
-    mainWindow.loadURL('http://localhost:4001');
+    mainWindow.loadURL('http://localhost:4003');
     mainWindow.webContents.openDevTools();
   } else {
     mainWindow.loadFile(path.join(__dirname, '../dist/index.html'));
@@ -70,12 +70,12 @@ function createTrayWindow() {
     const windowBounds = trayWindow.getBounds();
     // Position window centered above the tray icon
     const x = Math.round(trayBounds.x + (trayBounds.width / 2) - (windowBounds.width / 2));
-    const y = trayBounds.y - windowBounds.height - 60; // 60px gap above tray icon
+    const y = trayBounds.y - windowBounds.height - 24; // 24px gap above tray icon
     trayWindow.setPosition(x, y);
   }
 
   if (process.env.NODE_ENV === 'development') {
-    trayWindow.loadURL('http://localhost:4001?mode=tray');
+    trayWindow.loadURL('http://localhost:4003?mode=tray');
   } else {
     trayWindow.loadFile(path.join(__dirname, '../dist/index.html'), {
       query: { mode: 'tray' }
@@ -88,9 +88,40 @@ function createTrayWindow() {
 }
 
 function createTray() {
-  const iconPath = path.join(__dirname, '../assets/icon.ico');
+  const iconPath = path.join(__dirname, '../assets/icons/icon.ico');
   tray = new Tray(iconPath);
   tray.setToolTip('Windows App');
+
+  // Create context menu
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Show Main Window',
+      click: () => {
+        if (mainWindow && !mainWindow.isDestroyed()) {
+          mainWindow.show();
+          mainWindow.focus();
+        } else {
+          createMainWindow();
+          if (mainWindow) {
+            mainWindow.show();
+            mainWindow.focus();
+          }
+        }
+      }
+    },
+    {
+      type: 'separator'
+    },
+    {
+      label: 'Exit',
+      click: () => {
+        app.quit();
+      }
+    }
+  ]);
+
+  // Set the context menu
+  tray.setContextMenu(contextMenu);
 
   tray.on('click', () => {
     if (trayWindow?.isVisible()) {
@@ -102,7 +133,7 @@ function createTray() {
 }
 
 function createCloudPCWindow(): void {
-  const iconPath = path.join(__dirname, '../assets/CPCicon.png');
+  const iconPath = path.join(__dirname, '../assets/icons/CPCicon.png');
   cloudPCWindow = new BrowserWindow({
     width: 1200,
     height: 900,
@@ -129,7 +160,7 @@ function createCloudPCWindow(): void {
 
   // For now, load a blank page or the main content
   if (process.env.NODE_ENV === 'development') {
-    cloudPCWindow.loadURL('http://localhost:4001?mode=cloudpc');
+    cloudPCWindow.loadURL('http://localhost:4003?mode=cloudpc');
   } else {
     cloudPCWindow.loadFile(path.join(__dirname, '../dist/index.html'), {
       query: { mode: 'cloudpc' }

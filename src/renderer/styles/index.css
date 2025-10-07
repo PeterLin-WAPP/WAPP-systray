@@ -1,0 +1,12 @@
+/* Main CSS Index - Imports all modular CSS files */
+
+/* Base styles and resets */
+@import './base.css';
+
+/* Component-specific styles */
+@import './titlebar.css';
+@import './navigation.css';
+@import './main-window.css';
+@import './tray.css';
+@import './cloud-pc.css';
+@import './toast.css';

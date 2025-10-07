@@ -1,0 +1,50 @@
+/* Cloud PC Window Styles - Cloud PC loading and session screens */
+
+.cloud-pc-container {
+  width: 100vw;
+  height: 100vh;
+  background-image: url('../../../assets/wallpapers/CPCloadingbackground.png');
+  background-size: cover;
+  background-position: bottom;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  transition: background-image 0.8s ease-in-out;
+}
+
+.cloud-pc-container.session-mode {
+  background-image: url('../../../assets/wallpapers/CPCsession.png');
+  background-position: center top;
+}
+
+.cloud-pc-loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.5s ease-out;
+}
+
+.cloud-pc-loader.fade-out {
+  opacity: 0;
+}
+
+.loader-icon {
+  width: 64px;
+  height: 64px;
+  opacity: 0;
+  transform: scale(0.8) translateY(10px);
+  animation: fadeInLoader 0.6s ease-out 0.3s forwards;
+}
+
+@keyframes fadeInLoader {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

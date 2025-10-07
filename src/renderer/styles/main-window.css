@@ -1,0 +1,56 @@
+/* Main Window Styles - Main content area and app cards */
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  background-color: #ffffff;
+}
+
+.main-content.tray-mode {
+  margin-top: 16px;
+  background-color: transparent;
+  padding: 0px 12px 12px 12px;
+  width: 100%;
+  max-width: 320px;
+  box-sizing: border-box;
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
+  background: rgba(243, 243, 243, 0.95);
+  background-blend-mode: normal, color, luminosity;
+  -webkit-backdrop-filter: blur(30px);
+  backdrop-filter: blur(30px);
+  overflow: hidden;
+  height: calc(100% - 48px);
+}
+
+/* Background image removed for tray mode - tray should be transparent */
+
+/* Main window specific app cards (not tray mode) */
+.main-content:not(.tray-mode) .app-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.main-content:not(.tray-mode) .app-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border: 1px solid #e0e0e0;
+}
+
+.main-content:not(.tray-mode) .app-card:hover {
+  background-color: #f0f0f0;
+}
+
+.main-content:not(.tray-mode) .app-card .app-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 8px;
+}

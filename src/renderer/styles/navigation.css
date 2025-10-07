@@ -1,0 +1,46 @@
+/* Navigation Styles - Sidebar navigation */
+
+.nav-sidebar {
+  width: 72px;
+  background-color: #f4f4f4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 8px;
+  border-right: 1px solid #e0e0e0;
+}
+
+.nav-item {
+  width: calc(100% - 12px);
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 6px 12px 6px;
+  padding: 6px 0;
+  border-radius: 4px;
+  color: #000000;
+  cursor: pointer;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.nav-item .icon {
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+.nav-item .label {
+  font-size: 11px;
+  text-align: center;
+  white-space: nowrap;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.nav-item:hover {
+  background-color: #e7e7e7;
+}
+
+.nav-item.active {
+  background-color: #e2e2e2;
+}
