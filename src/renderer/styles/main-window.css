@@ -54,3 +54,9 @@
   height: 48px;
   margin-bottom: 8px;
 }
+
+/* App card hover effects for more button */
+.app-card:hover .app-more-button {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+}

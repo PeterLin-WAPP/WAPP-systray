@@ -108,29 +108,145 @@ const CollapsibleRow: React.FC<CollapsibleRowProps> = ({ title, children, defaul
   );
 };
 
-// Search and Filters Component
-const SearchFilters: React.FC = () => (
+// Search Bar Component (for header)
+const SearchBar: React.FC = () => (
   <div style={{ 
-    marginTop: '16px', 
-    marginBottom: '24px',
-    opacity: 1,
-    transform: 'translateY(0)',
-    transition: 'all 0.2s ease-in-out'
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px'
   }}>
     <input 
       type="text" 
-      placeholder="Search devices and apps"
+      placeholder="Search devices"
       style={{ 
         width: '300px', 
         padding: '8px 12px', 
         border: '1px solid #ccc', 
         borderRadius: '4px',
-        marginRight: '12px'
+        fontSize: '14px'
       }}
     />
-    <button style={{ padding: '8px 12px', marginRight: '8px', border: '1px solid #ccc', borderRadius: '4px', backgroundColor: 'white' }}>Status</button>
-    <button style={{ padding: '8px 12px', marginRight: '8px', border: '1px solid #ccc', borderRadius: '4px', backgroundColor: 'white' }}>Type</button>
-    <button style={{ padding: '8px 12px', border: '1px solid #ccc', borderRadius: '4px', backgroundColor: 'white' }}>Location</button>
+    <button 
+      style={{ 
+        padding: '8px 12px', 
+        border: '1px solid #ccc', 
+        borderRadius: '4px', 
+        backgroundColor: 'white',
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '4px',
+        fontSize: '14px'
+      }}
+    >
+      🔄 Refresh
+    </button>
+  </div>
+);
+
+// Filter Pills Component (above content)
+const FilterPills: React.FC = () => (
+  <div style={{ 
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: '16px',
+    paddingTop: '24px'
+  }}>
+    {/* Left side - Filter pills */}
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <button style={{ 
+        padding: '6px 12px', 
+        border: 'none', 
+        borderRadius: '16px', 
+        backgroundColor: '#333',
+        color: 'white',
+        fontSize: '14px',
+        cursor: 'pointer'
+      }}>
+        All
+      </button>
+      <button style={{ 
+        padding: '6px 12px', 
+        border: '1px solid #ccc', 
+        borderRadius: '16px', 
+        backgroundColor: 'white',
+        color: '#333',
+        fontSize: '14px',
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '4px'
+      }}>
+        Type
+        <img 
+          src={chevronIcon}
+          alt="Chevron"
+          style={{
+            width: '12px',
+            height: '12px',
+            transform: 'rotate(180deg)'
+          }}
+        />
+      </button>
+    </div>
+
+    {/* Right side - Sorting and view options */}
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <button style={{ 
+        padding: '6px 12px', 
+        border: '1px solid #ccc', 
+        borderRadius: '4px', 
+        backgroundColor: 'white',
+        color: '#333',
+        fontSize: '14px',
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '4px'
+      }}>
+        A-Z
+        <img 
+          src={chevronIcon}
+          alt="Chevron"
+          style={{
+            width: '12px',
+            height: '12px',
+            transform: 'rotate(180deg)'
+          }}
+        />
+      </button>
+      
+      <div style={{ 
+        width: '1px', 
+        height: '20px', 
+        backgroundColor: '#ccc',
+        margin: '0 4px'
+      }} />
+      
+      <button style={{ 
+        padding: '8px', 
+        border: '1px solid #ccc', 
+        borderRadius: '4px', 
+        backgroundColor: 'white',
+        cursor: 'pointer',
+        fontSize: '16px'
+      }}>
+        ☰
+      </button>
+      
+      <button style={{ 
+        padding: '8px', 
+        border: '1px solid #ccc', 
+        borderRadius: '4px', 
+        backgroundColor: '#0078d4',
+        color: 'white',
+        cursor: 'pointer',
+        fontSize: '16px'
+      }}>
+        ⋯⋯
+      </button>
+    </div>
   </div>
 );
 
@@ -153,8 +269,17 @@ const MainContentLayout: React.FC<MainContentLayoutProps> = ({
     return (
       <div style={{ display: 'grid', gridTemplateRows: 'auto 1fr', gap: `${UI_TOKENS.GAP}px` }}>
         <div>
-          <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '600' }}>Management</h1>
-          <SearchFilters />
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'space-between',
+            marginBottom: '0',
+            marginTop: '12px'
+          }}>
+            <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '600' }}>Management</h1>
+            <SearchBar />
+          </div>
+          <FilterPills />
         </div>
         <div>
           <table style={{ width: '100%', borderCollapse: 'collapse', backgroundColor: 'white', border: '1px solid #e0e0e0' }}>
@@ -195,7 +320,7 @@ const MainContentLayout: React.FC<MainContentLayoutProps> = ({
     return (
       <div style={{ display: 'grid', gridTemplateRows: 'auto 1fr', gap: `${UI_TOKENS.GAP}px` }}>
         <div>
-          <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '600' }}>Favorites</h1>
+          <h1 style={{ margin: '12px 0 0 0', fontSize: '24px', fontWeight: '600' }}>Favorites</h1>
         </div>
         <div style={{ 
           display: 'flex', 
@@ -226,7 +351,7 @@ const MainContentLayout: React.FC<MainContentLayoutProps> = ({
     return (
       <div style={{ display: 'grid', gridTemplateRows: 'auto 1fr', gap: `${UI_TOKENS.GAP}px` }}>
         <div>
-          <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '600' }}>Favorites</h1>
+          <h1 style={{ margin: '12px 0 0 0', fontSize: '24px', fontWeight: '600' }}>Favorites</h1>
         </div>
         <div>
           {/* Devices Section */}
@@ -293,13 +418,16 @@ const MainContentLayout: React.FC<MainContentLayoutProps> = ({
               gap: `${UI_TOKENS.GAP}px`,
               flexWrap: 'wrap'
             }}>
-              {Array.from({ length: Math.min(7, 5 + uiState) }).map((_, index) => (
-                <AppCard
-                  key={index}
-                  appId={index < 2 ? (index === 0 ? 'app1' : 'app2') : undefined}
-                  name={index >= 2 ? `App ${index + 1}` : undefined}
-                />
-              ))}
+              {Array.from({ length: uiState >= 3 ? 5 : Math.min(7, 5 + uiState) }).map((_, index) => {
+                const appIds = ['word', 'teams', 'outlook', 'edge', 'powerpoint'];
+                return (
+                  <AppCard
+                    key={index}
+                    appId={index < appIds.length ? appIds[index] : undefined}
+                    name={index >= appIds.length ? `App ${index + 1}` : undefined}
+                  />
+                );
+              })}
             </div>
           </div>
         </div>
@@ -312,8 +440,17 @@ const MainContentLayout: React.FC<MainContentLayoutProps> = ({
     return (
       <div style={{ display: 'grid', gridTemplateRows: 'auto 1fr', gap: `${UI_TOKENS.GAP}px` }}>
         <div>
-          <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '600' }}>Apps</h1>
-          <SearchFilters />
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'space-between',
+            marginBottom: '0',
+            marginTop: '12px'
+          }}>
+            <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '600' }}>Apps</h1>
+            <SearchBar />
+          </div>
+          <FilterPills />
         </div>
         <div>
           <CollapsibleRow title="Contoso North" defaultExpanded={true}>
@@ -323,13 +460,9 @@ const MainContentLayout: React.FC<MainContentLayoutProps> = ({
               flexWrap: 'wrap',
               marginBottom: '16px'
             }}>
-              {Array.from({ length: 3 }).map((_, index) => (
-                <AppCard
-                  key={index}
-                  appId={index < 2 ? (index === 0 ? 'app1' : 'app2') : undefined}
-                  name={index >= 2 ? `App ${index + 1}` : undefined}
-                />
-              ))}
+              <AppCard appId="word" />
+              <AppCard appId="teams" />
+              <AppCard appId="outlook" />
             </div>
           </CollapsibleRow>
           
@@ -339,12 +472,10 @@ const MainContentLayout: React.FC<MainContentLayoutProps> = ({
               gap: `${UI_TOKENS.GAP}px`,
               flexWrap: 'wrap'
             }}>
-              {Array.from({ length: 4 }).map((_, index) => (
-                <AppCard
-                  key={index + 3}
-                  name={`App ${index + 4}`}
-                />
-              ))}
+              <AppCard appId="edge" />
+              <AppCard appId="powerpoint" />
+              <AppCard appId="viva" />
+              <AppCard appId="vivaconnections" />
             </div>
           </CollapsibleRow>
         </div>
@@ -362,15 +493,26 @@ const MainContentLayout: React.FC<MainContentLayoutProps> = ({
     }}>
       {/* Header */}
       <div style={{ transition: 'all 0.2s ease-in-out' }}>
-        <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '600' }}>
-          {uiState === 0 ? 'Your Cloud PC' : 'Devices'}
-        </h1>
-        {uiState === 0 && (
-          <p style={{ margin: '4px 0 0 0', fontSize: '14px', color: '#666', fontWeight: '400' }}>
-            Contoso Finance
-          </p>
-        )}
-        {uiState >= 2 && <SearchFilters />}
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'space-between',
+          marginBottom: uiState >= 2 ? '0' : '0',
+          marginTop: '12px'
+        }}>
+          <div>
+            <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '600' }}>
+              {uiState === 0 ? 'Your Cloud PC' : 'Devices'}
+            </h1>
+            {uiState === 0 && (
+              <p style={{ margin: '4px 0 0 0', fontSize: '14px', color: '#666', fontWeight: '400' }}>
+                Contoso Finance
+              </p>
+            )}
+          </div>
+          {uiState >= 2 && <SearchBar />}
+        </div>
+        {uiState >= 2 && <FilterPills />}
       </div>
 
       {/* Content */}
@@ -889,8 +1031,8 @@ const AppContent: React.FC = () => {
               <section className="resource-section">
                 <h2>Apps</h2>
                 <div className="app-cards" style={{ display: 'flex', gap: '8px' }}>
-                  <AppCard appId="app1" />
-                  <AppCard appId="app2" />
+                  <AppCard appId="word" />
+                  <AppCard appId="teams" />
                 </div>
               </section>
             </div>
