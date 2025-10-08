@@ -75,7 +75,7 @@ const CollapsibleRow: React.FC<CollapsibleRowProps> = ({ title, children, defaul
           fontWeight: '600',
           lineHeight: '22.882px',
           color: '#333',
-          marginBottom: '12px',
+          marginBottom: '6px',
           outline: 'none'
         }}
         onFocus={(e) => e.target.style.outline = '2px solid #0078d4'}
@@ -385,7 +385,7 @@ const MainContentLayout: React.FC<MainContentLayoutProps> = ({
                 gap: `${UI_TOKENS.GAP}px`,
                 transition: 'all 0.2s ease-in-out'
               }}>
-                {Array.from({ length: 2 }).map((_, index) => (
+                {Array.from({ length: 3 }).map((_, index) => (
                   <DeviceCard
                     key={index}
                     onConnect={() => {
@@ -811,9 +811,18 @@ const AppContent: React.FC = () => {
         </div>
       ) : (
         // Main Window and Tray Window Content
-        <div className={`app-container ${isTrayWindow ? 'tray-mode' : ''}`}>
+        <div className={`app-container ${isTrayWindow ? 'tray-mode' : ''}`} style={{
+          display: 'flex',
+          height: '100vh',
+          overflow: 'hidden'
+        }}>
         {!isTrayWindow && uiState > 0 && (
-          <nav className="nav-sidebar"
+          <nav className="nav-sidebar" style={{
+            flexShrink: 0,
+            width: `${UI_TOKENS.NAV_WIDTH}px`,
+            height: '100vh',
+            overflow: 'hidden'
+          }}
           >
             {uiState >= 2 && (
               <NavItem
@@ -858,7 +867,9 @@ const AppContent: React.FC = () => {
             padding: !isTrayWindow ? `${UI_TOKENS.PAGE_MARGIN}px` : undefined,
             display: 'grid',
             gridTemplateRows: 'auto 1fr',
-            gap: `${UI_TOKENS.GAP}px`
+            gap: `${UI_TOKENS.GAP}px`,
+            overflow: 'auto',
+            maxHeight: '100vh'
           }}
         >
           {isTrayWindow ? (

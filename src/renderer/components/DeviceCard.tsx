@@ -4,6 +4,7 @@ import { DEVICE_CARD_SIZES } from '../constants';
 
 // Import images using webpack's module system
 const cpcWallpaper = require('../../../assets/wallpapers/CPCwallpaper.png');
+const moreIcon = require('../../../assets/icons/More.svg');
 
 interface DeviceCardProps {
   onConnect?: () => void;
@@ -56,23 +57,62 @@ export const DeviceCard: React.FC<DeviceCardProps> = ({
         background: 'rgba(255, 255, 255, 0.55)',
         backdropFilter: 'blur(24px)',
         borderBottomLeftRadius: '8px',
-        borderBottomRightRadius: '8px'
+        borderBottomRightRadius: '8px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between'
       }}>
-        <h3 style={{ 
-          margin: '0 0 4px 0', 
-          fontWeight: '600', 
-          fontFamily: "'Segoe UI', system-ui, sans-serif",
-          fontSize: '14px'
-        }}>Cloud PC</h3>
-        <p style={{ 
-          fontSize: '12px', 
-          margin: '0', 
-          color: '#666', 
-          fontWeight: '400',
-          fontFamily: "'Segoe UI', system-ui, sans-serif" 
-        }}>
-          8vCPU | 56GB | 1024GB
-        </p>
+        <div style={{ flex: 1 }}>
+          <h3 style={{ 
+            margin: '0 0 4px 0', 
+            fontWeight: '600', 
+            fontFamily: "'Segoe UI', system-ui, sans-serif",
+            fontSize: '14px'
+          }}>My Cloud PC</h3>
+          <p style={{ 
+            fontSize: '12px', 
+            margin: '0', 
+            color: '#666', 
+            fontWeight: '400',
+            fontFamily: "'Segoe UI', system-ui, sans-serif" 
+          }}>
+            8vCPU | 32GB | 512GB
+          </p>
+        </div>
+        <button 
+          style={{
+            background: 'none',
+            border: 'none',
+            padding: '4px',
+            cursor: 'pointer',
+            borderRadius: '4px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: 'background-color 0.2s ease',
+            marginLeft: '12px'
+          }}
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent card click when clicking more button
+            // Handle more menu here
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = 'transparent';
+          }}
+        >
+          <img 
+            src={moreIcon} 
+            alt="More options" 
+            style={{ 
+              width: '20px', 
+              height: '20px',
+              opacity: 0.7
+            }} 
+          />
+        </button>
       </div>
     </div>
   );
