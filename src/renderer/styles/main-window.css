@@ -68,3 +68,16 @@
   opacity: 1 !important;
   transform: scale(1) !important;
 }
+
+/* App card hover effects for icon scaling and background dimming */
+.app-card:hover .app-icon-container {
+  transform: translate(-50%, -60%) scale(1.1) !important;
+}
+
+.app-card:hover .app-icon {
+  transform: scale(1.1) !important;
+}
+
+.app-card:hover .app-info {
+  background: rgba(255, 255, 255, 0.35) !important;
+}

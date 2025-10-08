@@ -390,12 +390,13 @@ const MainContentLayout: React.FC<MainContentLayoutProps> = ({
         <div style={{ 
           display: 'flex', 
           flexDirection: 'column',
+          paddingTop: '48px',
           alignItems: 'center', 
           justifyContent: 'center',
           minHeight: '300px',
           color: '#666',
           fontSize: '16px',
-          gap: '24px'
+          gap: '8px'
         }}>
           <img 
             src={favoritesEmptyState} 

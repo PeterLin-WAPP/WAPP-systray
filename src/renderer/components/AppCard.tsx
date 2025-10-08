@@ -94,23 +94,27 @@ export const AppCard: React.FC<AppCardProps> = ({
 
       {/* App icon in centered container */}
       {appData.icon && (
-        <div style={{
-          position: 'absolute',
-          top: '35%',
-          left: '50%',
-          paddingTop: '6px',
-          transform: 'translate(-50%, -60%)', // Slightly higher than center to account for bottom info bar
-          width: '46px',
-          height: '40px',
-          borderRadius: '4px',
-          backgroundColor: 'rgba(255, 255, 255, 0.9)',
-          backdropFilter: 'blur(10px)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
-          zIndex: 1
-        }}>
+        <div 
+          className="app-icon-container"
+          style={{
+            position: 'absolute',
+            top: '35%',
+            left: '50%',
+            paddingTop: '6px',
+            transform: 'translate(-50%, -60%)', // Slightly higher than center to account for bottom info bar
+            width: '46px',
+            height: '40px',
+            borderRadius: '4px',
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            backdropFilter: 'blur(10px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            zIndex: 1,
+            transition: 'transform 0.3s ease-in-out'
+          }}
+        >
           <img 
             src={appData.icon} 
             alt={appData.name || 'App'} 
@@ -118,7 +122,8 @@ export const AppCard: React.FC<AppCardProps> = ({
             style={{ 
               width: '32px', 
               height: '32px',
-              objectFit: 'contain'
+              objectFit: 'contain',
+              transition: 'transform 0.3s ease-in-out'
             }} 
           />
         </div>
@@ -139,7 +144,8 @@ export const AppCard: React.FC<AppCardProps> = ({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          zIndex: 2
+          zIndex: 2,
+          transition: 'background 0.1s ease-in-out'
         }}>
           <div style={{ flex: 1 }}>
             <h3 style={{ 
