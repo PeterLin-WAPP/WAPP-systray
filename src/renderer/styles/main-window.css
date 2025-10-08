@@ -4,6 +4,14 @@
   flex: 1;
   padding: 20px;
   background-color: #ffffff;
+  /* Hide scrollbars while keeping scroll functionality */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+/* Hide scrollbar for WebKit browsers */
+.main-content::-webkit-scrollbar {
+  display: none;
 }
 
 .main-content.tray-mode {

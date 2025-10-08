@@ -25,7 +25,12 @@ const navDevicesActive = require('../../assets/icons/nav-devices-active.svg');
 const navDevicesRest = require('../../assets/icons/nav-devices-rest.svg');
 const navAppActive = require('../../assets/icons/nav-app-active.svg');
 const navAppRest = require('../../assets/icons/nav-app-rest.svg');
+const navManagementActive = require('../../assets/icons/nav-management-active.svg');
+const navManagementRest = require('../../assets/icons/nav-management-rest.svg');
 const chevronIcon = require('../../assets/icons/Chevron.svg');
+const searchIcon = require('../../assets/icons/search.svg');
+const listViewIcon = require('../../assets/icons/✅ Admin/listview.svg');
+const gridViewIcon = require('../../assets/icons/✅ Admin/gridview.svg');
 // Wallpapers
 const cpcLoadingBackground = require('../../assets/wallpapers/CPCloadingbackground.png');
 const cpcSession = require('../../assets/wallpapers/CPCsession.png');
@@ -110,37 +115,31 @@ const CollapsibleRow: React.FC<CollapsibleRowProps> = ({ title, children, defaul
 
 // Search Bar Component (for header)
 const SearchBar: React.FC = () => (
-  <div style={{ 
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px'
-  }}>
+  <div style={{ position: 'relative', display: 'inline-block' }}>
     <input 
       type="text" 
-      placeholder="Search devices"
+      placeholder=""
       style={{ 
-        width: '300px', 
-        padding: '8px 12px', 
+        width: '200px', 
+        padding: '8px 12px 8px 40px', 
         border: '1px solid #ccc', 
         borderRadius: '4px',
         fontSize: '14px'
       }}
     />
-    <button 
-      style={{ 
-        padding: '8px 12px', 
-        border: '1px solid #ccc', 
-        borderRadius: '4px', 
-        backgroundColor: 'white',
-        cursor: 'pointer',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '4px',
-        fontSize: '14px'
+    <img 
+      src={searchIcon}
+      alt="Search"
+      style={{
+        position: 'absolute',
+        left: '12px',
+        top: '50%',
+        transform: 'translateY(-50%)',
+        width: '16px',
+        height: '16px',
+        opacity: 0.6
       }}
-    >
-      🔄 Refresh
-    </button>
+    />
   </div>
 );
 
@@ -192,12 +191,12 @@ const FilterPills: React.FC = () => (
     </div>
 
     {/* Right side - Sorting and view options */}
-    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
       <button style={{ 
         padding: '6px 12px', 
-        border: '1px solid #ccc', 
+        border: 'none', 
         borderRadius: '4px', 
-        backgroundColor: 'white',
+        backgroundColor: 'transparent',
         color: '#333',
         fontSize: '14px',
         cursor: 'pointer',
@@ -212,7 +211,7 @@ const FilterPills: React.FC = () => (
           style={{
             width: '12px',
             height: '12px',
-            transform: 'rotate(180deg)'
+            transform: 'rotate(270deg)'
           }}
         />
       </button>
@@ -225,26 +224,43 @@ const FilterPills: React.FC = () => (
       }} />
       
       <button style={{ 
-        padding: '8px', 
-        border: '1px solid #ccc', 
+        padding: '8px',
+        border: 'none', 
         borderRadius: '4px', 
-        backgroundColor: 'white',
+        backgroundColor: 'transparent',
         cursor: 'pointer',
-        fontSize: '16px'
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
       }}>
-        ☰
+        <img 
+          src={listViewIcon}
+          alt="List view"
+          style={{
+            width: '20px',
+            height: '20px'
+          }}
+        />
       </button>
       
       <button style={{ 
-        padding: '8px', 
-        border: '1px solid #ccc', 
+        padding: '8px',
+        border: 'none', 
         borderRadius: '4px', 
-        backgroundColor: '#0078d4',
-        color: 'white',
+        backgroundColor: 'transparent',
         cursor: 'pointer',
-        fontSize: '16px'
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
       }}>
-        ⋯⋯
+        <img 
+          src={gridViewIcon}
+          alt="Grid view"
+          style={{
+            width: '20px',
+            height: '20px'
+          }}
+        />
       </button>
     </div>
   </div>
@@ -269,41 +285,90 @@ const MainContentLayout: React.FC<MainContentLayoutProps> = ({
     return (
       <div style={{ display: 'grid', gridTemplateRows: 'auto 1fr', gap: `${UI_TOKENS.GAP}px` }}>
         <div>
-          <div style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'space-between',
-            marginBottom: '0',
-            marginTop: '12px'
-          }}>
-            <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '600' }}>Management</h1>
-            <SearchBar />
+          <h1 style={{ margin: '12px 0 0 0', fontSize: '24px', fontWeight: '600' }}>Management</h1>
+          <p style={{ margin: '8px 0 24px 0', fontSize: '14px', color: '#666', lineHeight: '1.4' }}>
+            Manage who can access apps and services included in your Microsoft 365 subscriptions. Add or remove users, manage licenses, and reset passwords.
+          </p>
+
+          {/* Search bar */}
+          <div style={{ marginBottom: '16px' }}>
+            <input 
+              type="text" 
+              placeholder="Search your users list"
+              style={{ 
+                width: '300px', 
+                padding: '8px 12px', 
+                border: '1px solid #ccc', 
+                borderRadius: '4px',
+                fontSize: '14px'
+              }}
+            />
           </div>
-          <FilterPills />
         </div>
+        
         <div>
-          <table style={{ width: '100%', borderCollapse: 'collapse', backgroundColor: 'white', border: '1px solid #e0e0e0' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', backgroundColor: 'white' }}>
             <thead>
-              <tr style={{ backgroundColor: '#f9f9f9' }}>
-                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e0e0e0', cursor: 'pointer' }}>Name ↕</th>
-                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e0e0e0', cursor: 'pointer' }}>Type ↕</th>
-                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e0e0e0', cursor: 'pointer' }}>Owner ↕</th>
-                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e0e0e0', cursor: 'pointer' }}>Status ↕</th>
-                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e0e0e0', cursor: 'pointer' }}>Last Active ↕</th>
-                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e0e0e0' }}>Actions</th>
+              <tr style={{ borderBottom: '1px solid #e0e0e0' }}>
+                <th style={{ padding: '12px', textAlign: 'left', fontWeight: '600', fontSize: '14px', cursor: 'pointer' }}>
+                  Name <span style={{ fontSize: '12px', color: '#666' }}>↕</span>
+                </th>
+                <th style={{ padding: '12px', textAlign: 'left', fontWeight: '600', fontSize: '14px' }}>
+                  Username for sign-in
+                </th>
+                <th style={{ padding: '12px', textAlign: 'left', fontWeight: '600', fontSize: '14px' }}>
+                  Licenses
+                </th>
+                <th style={{ padding: '12px', textAlign: 'left', fontWeight: '600', fontSize: '14px' }}>
+                </th>
               </tr>
             </thead>
             <tbody>
-              {Array.from({ length: 12 }).map((_, index) => (
-                <tr key={index}>
-                  <td style={{ padding: '12px', borderBottom: '1px solid #e0e0e0' }}>Cloud PC {index + 1}</td>
-                  <td style={{ padding: '12px', borderBottom: '1px solid #e0e0e0' }}>Device</td>
-                  <td style={{ padding: '12px', borderBottom: '1px solid #e0e0e0' }}>User {index + 1}</td>
-                  <td style={{ padding: '12px', borderBottom: '1px solid #e0e0e0' }}>{index % 3 === 0 ? 'Available' : index % 3 === 1 ? 'In Use' : 'Maintenance'}</td>
-                  <td style={{ padding: '12px', borderBottom: '1px solid #e0e0e0' }}>{index === 0 ? 'Now' : `${index} hours ago`}</td>
-                  <td style={{ padding: '12px', borderBottom: '1px solid #e0e0e0' }}>
-                    <button style={{ padding: '4px 8px', fontSize: '12px', border: 'none', backgroundColor: '#0078d4', color: 'white', borderRadius: '2px' }}>
-                      Manage
+              {[
+                { name: 'A.J. Smith', initials: 'AS', username: 'anthons@windows365-demo.microsoft.com', license: 'Enterprise Mobility + Security E5 , Cloud PC - Internal', color: '#8764b8' },
+                { name: 'Aaron', initials: 'A', username: 'aaron@windows365-demo.microsoft.com', license: 'Unlicensed', color: '#6bb6ff' },
+                { name: 'Aaron', initials: 'A', username: 'aawong@windows365-demo.microsoft.com', license: 'Unlicensed', color: '#6bb6ff' },
+                { name: 'Abena Edugyan', initials: 'AE', username: 'abenaedugyan@windows365-demo.microsoft.com', license: 'Unlicensed', color: '#0078d4' },
+                { name: 'Abraham Pineda', initials: 'AP', username: 'abpineda@windows365-demo.microsoft.com', license: 'Enterprise Mobility + Security E5 , Windows 365 Enterprise 2 vCPU, 8 GB, 128 GB', color: '#8764b8' },
+                { name: 'AD join account', initials: 'AA', username: 'ADJOIN@windows365-demo.microsoft.com', license: 'Unlicensed', color: '#8764b8' },
+                { name: 'Adele Vance', initials: 'AV', username: 'officetest@windows365-demo.microsoft.com', license: 'Unlicensed', color: '#8764b8' },
+                { name: 'Akash Chawla', initials: 'AC', username: 'akashchawla@windows365-demo.microsoft.com', license: 'Enterprise Mobility + Security E5', color: '#8764b8' }
+              ].map((user, index) => (
+                <tr key={index} style={{ borderBottom: '1px solid #f0f0f0' }}>
+                  <td style={{ padding: '12px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{
+                      width: '32px',
+                      height: '32px',
+                      borderRadius: '50%',
+                      backgroundColor: user.color,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: 'white',
+                      fontSize: '12px',
+                      fontWeight: '600'
+                    }}>
+                      {user.initials}
+                    </div>
+                    <span style={{ fontSize: '14px' }}>{user.name}</span>
+                  </td>
+                  <td style={{ padding: '12px', fontSize: '14px', color: '#666' }}>
+                    {user.username}
+                  </td>
+                  <td style={{ padding: '12px', fontSize: '14px', color: '#666' }}>
+                    {user.license}
+                  </td>
+                  <td style={{ padding: '12px' }}>
+                    <button style={{
+                      border: 'none',
+                      background: 'none',
+                      cursor: 'pointer',
+                      padding: '4px',
+                      borderRadius: '2px',
+                      fontSize: '16px',
+                      color: '#666'
+                    }}>
+                      ⋯
                     </button>
                   </td>
                 </tr>
@@ -993,9 +1058,9 @@ const AppContent: React.FC = () => {
             )}
             {uiState === 4 && (
               <NavItem
-                activeIcon={navDevicesActive}
-                restIcon={navDevicesRest}
-                label="Management"
+                activeIcon={navManagementActive}
+                restIcon={navManagementRest}
+                label="Admin"
                 isActive={activeNav === 'management'}
                 onClick={() => setActiveNav('management')}
               />
