@@ -9,8 +9,10 @@ html, body {
 
 .app-container {
   display: flex;
+  flex-direction: row;
   height: 100vh;
-  padding-top: 32px;
+  padding-top: var(--titlebar-height);
+  align-items: stretch;
 }
 
 .app-container.tray-mode {

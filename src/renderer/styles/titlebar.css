@@ -1,7 +1,7 @@
 /* Titlebar Styles - Window titlebar and tray controls */
 
 .titlebar {
-  height: 48px;
+  height: var(--titlebar-height);
   background: #f4f4f4;
   user-select: none;
   display: flex;
@@ -13,6 +13,15 @@
   right: 0;
   z-index: 1000;
   -webkit-app-region: no-drag;
+}
+
+.add-button {
+  -webkit-app-region: no-drag;
+  transition: all 0.2s ease;
+}
+
+.add-button:hover:not(:disabled) {
+  background-color: #106ebe !important;
 }
 
 .tray-titlebar {

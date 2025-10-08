@@ -1,5 +1,13 @@
 /* Main CSS Index - Imports all modular CSS files */
 
+/* CSS Variables for UI Tokens */
+:root {
+  --nav-width: 72px;
+  --page-margin: 24px;
+  --gap: 24px;
+  --titlebar-height: 48px;
+}
+
 /* Base styles and resets */
 @import './base.css';
 

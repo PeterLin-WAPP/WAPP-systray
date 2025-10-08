@@ -9,8 +9,8 @@ let cloudPCWindow: BrowserWindow | null = null;
 function createMainWindow() {
   const iconPath = path.join(__dirname, '../assets/icons/icon.png');
   mainWindow = new BrowserWindow({
-    width: 1024,
-    height: 768,
+    width: 824,
+    height: 664,
     icon: iconPath,
     frame: false,
     titleBarStyle: 'hidden',
@@ -246,5 +246,60 @@ ipcMain.on('open-file-upload', async (event) => {
     }
   } catch (error) {
     console.error('File upload error:', error);
+  }
+});
+
+// Handle window size changes
+ipcMain.on('set-window-size', (event, width: number, height: number) => {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.setSize(width, height);
+    mainWindow.center(); // Center the window after resize
+  }
+});
+
+// Handle animated window size changes
+ipcMain.on('set-window-size-animated', (event, width: number, height: number, duration: number = 300) => {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    const currentBounds = mainWindow.getBounds();
+    const startWidth = currentBounds.width;
+    const startHeight = currentBounds.height;
+    const startX = currentBounds.x;
+    const startY = currentBounds.y;
+    
+    // Calculate target position (centered)
+    const display = screen.getPrimaryDisplay();
+    const targetX = Math.round((display.workAreaSize.width - width) / 2);
+    const targetY = Math.round((display.workAreaSize.height - height) / 2);
+    
+    const startTime = Date.now();
+    
+    const animate = () => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      
+      // Easing function (ease-out)
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+      
+      // Interpolate dimensions and position
+      const currentWidth = Math.round(startWidth + (width - startWidth) * easeOut);
+      const currentHeight = Math.round(startHeight + (height - startHeight) * easeOut);
+      const currentX = Math.round(startX + (targetX - startX) * easeOut);
+      const currentY = Math.round(startY + (targetY - startY) * easeOut);
+      
+      if (mainWindow && !mainWindow.isDestroyed()) {
+        mainWindow.setBounds({
+          x: currentX,
+          y: currentY,
+          width: currentWidth,
+          height: currentHeight
+        });
+        
+        if (progress < 1) {
+          setTimeout(animate, 16); // ~60fps
+        }
+      }
+    };
+    
+    animate();
   }
 });

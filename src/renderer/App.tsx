@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import './styles/index.css';
+import { UIProvider, useUIStore } from './store/UIStore';
+import { DeviceCard } from './components/DeviceCard';
+import { AppCard } from './components/AppCard';
+import { UI_TOKENS, UIState } from './constants';
+
 // Import images using webpack's module system
 // Icons
 const appIcon = require('../../assets/icons/icon.ico');
 const expandIcon = require('../../assets/icons/expand.svg');
 const profileIcon = require('../../assets/icons/profile.png');
 const wappLoader = require('../../assets/icons/WAPPloader.svg');
-const app1Icon = require('../../assets/icons/app1.png');
-const app2Icon = require('../../assets/icons/app2.png');
-const actionButtonUpload = require('../../assets/icons/action-button-upload.png');
-const actionButtonCopilot = require('../../assets/icons/action-button-copilot.png');
 // Navigation Icons
 const navStarActive = require('../../assets/icons/nav-star-active.svg');
 const navStarRest = require('../../assets/icons/nav-star-rest.svg');
@@ -18,7 +19,6 @@ const navDevicesRest = require('../../assets/icons/nav-devices-rest.svg');
 const navAppActive = require('../../assets/icons/nav-app-active.svg');
 const navAppRest = require('../../assets/icons/nav-app-rest.svg');
 // Wallpapers
-const cpcWallpaper = require('../../assets/wallpapers/CPCwallpaper.png');
 const cpcLoadingBackground = require('../../assets/wallpapers/CPCloadingbackground.png');
 const cpcSession = require('../../assets/wallpapers/CPCsession.png');
 
@@ -37,9 +37,164 @@ const NavItem: React.FC<NavItemProps> = ({ activeIcon, restIcon, label, isActive
   </div>
 );
 
-export const App: React.FC = () => {
+// Main Content Layout for different UI states
+interface MainContentLayoutProps {
+  uiState: UIState;
+  activeNav: string;
+}
+
+const MainContentLayout: React.FC<MainContentLayoutProps> = ({
+  uiState,
+  activeNav,
+}) => {
+  const deviceCount = uiState === 0 ? 1 : uiState === 1 ? 1 : uiState >= 2 ? Math.min(uiState, 3) : 1;
+
+  if (uiState === 4 && activeNav === 'management') {
+    // State 4: Management list view
+    return (
+      <div style={{ display: 'grid', gridTemplateRows: 'auto 1fr', gap: `${UI_TOKENS.GAP}px` }}>
+        <div>
+          <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '600' }}>Management</h1>
+          <div style={{ marginTop: '16px' }}>
+            <input 
+              type="text" 
+              placeholder="Search devices and apps"
+              style={{ 
+                width: '300px', 
+                padding: '8px 12px', 
+                border: '1px solid #ccc', 
+                borderRadius: '4px',
+                marginRight: '12px'
+              }}
+            />
+            <button style={{ padding: '8px 12px', marginRight: '8px', border: '1px solid #ccc', borderRadius: '4px', backgroundColor: 'white' }}>Status</button>
+            <button style={{ padding: '8px 12px', marginRight: '8px', border: '1px solid #ccc', borderRadius: '4px', backgroundColor: 'white' }}>Type</button>
+            <button style={{ padding: '8px 12px', border: '1px solid #ccc', borderRadius: '4px', backgroundColor: 'white' }}>Location</button>
+          </div>
+        </div>
+        <div>
+          <table style={{ width: '100%', borderCollapse: 'collapse', backgroundColor: 'white', border: '1px solid #e0e0e0' }}>
+            <thead>
+              <tr style={{ backgroundColor: '#f9f9f9' }}>
+                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e0e0e0' }}>Name</th>
+                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e0e0e0' }}>Type</th>
+                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e0e0e0' }}>Owner</th>
+                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e0e0e0' }}>Status</th>
+                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e0e0e0' }}>Last Active</th>
+                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e0e0e0' }}>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style={{ padding: '12px', borderBottom: '1px solid #e0e0e0' }}>Cloud PC</td>
+                <td style={{ padding: '12px', borderBottom: '1px solid #e0e0e0' }}>Device</td>
+                <td style={{ padding: '12px', borderBottom: '1px solid #e0e0e0' }}>User</td>
+                <td style={{ padding: '12px', borderBottom: '1px solid #e0e0e0' }}>Available</td>
+                <td style={{ padding: '12px', borderBottom: '1px solid #e0e0e0' }}>Now</td>
+                <td style={{ padding: '12px', borderBottom: '1px solid #e0e0e0' }}>
+                  <button style={{ padding: '4px 8px', fontSize: '12px', border: 'none', backgroundColor: '#0078d4', color: 'white', borderRadius: '2px' }}>
+                    Manage
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ display: 'grid', gridTemplateRows: 'auto auto 1fr', gap: `${UI_TOKENS.GAP}px` }}>
+      {/* Header */}
+      <div>
+        <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '600' }}>
+          {uiState === 0 ? 'Cloud PC' : 'Devices and Apps'}
+        </h1>
+        {uiState === 3 && (
+          <div style={{ marginTop: '16px' }}>
+            <input 
+              type="text" 
+              placeholder="Search devices and apps"
+              style={{ 
+                width: '300px', 
+                padding: '8px 12px', 
+                border: '1px solid #ccc', 
+                borderRadius: '4px',
+                marginRight: '12px'
+              }}
+            />
+            <button style={{ padding: '8px 12px', marginRight: '8px', border: '1px solid #ccc', borderRadius: '4px', backgroundColor: 'white' }}>Status</button>
+            <button style={{ padding: '8px 12px', marginRight: '8px', border: '1px solid #ccc', borderRadius: '4px', backgroundColor: 'white' }}>Type</button>
+            <button style={{ padding: '8px 12px', border: '1px solid #ccc', borderRadius: '4px', backgroundColor: 'white' }}>Location</button>
+          </div>
+        )}
+      </div>
+
+      {/* Devices Section */}
+      <div>
+        <div 
+          style={{
+            display: 'grid',
+            gap: `${UI_TOKENS.GAP}px`,
+            gridTemplateColumns: uiState >= 2 ? `repeat(auto-fill, 464px)` : 'auto',
+            gridAutoFlow: uiState >= 2 ? 'row' : 'column',
+            justifyContent: uiState === 0 ? 'flex-start' : 'flex-start'
+          }}
+        >
+          {Array.from({ length: deviceCount }).map((_, index) => (
+            <DeviceCard
+              key={index}
+              onConnect={() => {
+                if (index === 0) {
+                  // @ts-ignore (window.electron is injected)
+                  window.electron?.openCloudPC();
+                }
+              }}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Apps Section - only visible for states 1+ */}
+      {uiState >= 1 && (
+        <div>
+          <h2 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '16px' }}>Apps</h2>
+          <div 
+            style={{
+              display: 'flex',
+              gap: `${UI_TOKENS.GAP}px`,
+              flexWrap: 'wrap'
+            }}
+          >
+            {Array.from({ length: Math.min(7, 5 + uiState) }).map((_, index) => (
+              <AppCard
+                key={index}
+                appId={index < 2 ? (index === 0 ? 'app1' : 'app2') : undefined}
+                name={index >= 2 ? `App ${index + 1}` : undefined}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Main App Content Component
+const AppContent: React.FC = () => {
+  const { uiState, incrementState, decrementState } = useUIStore();
   const [activeNav, setActiveNav] = useState('devices');
-  const [isCloudPCConnected, setIsCloudPCConnected] = useState(false);
+
+  // Set Management as active when reaching state 4
+  useEffect(() => {
+    if (uiState === 4) {
+      setActiveNav('management');
+    } else if (uiState > 0 && activeNav === 'management') {
+      setActiveNav('devices');
+    }
+  }, [uiState, activeNav]);
+
   const [isLoaderVisible, setIsLoaderVisible] = useState(true);
   const [showSession, setShowSession] = useState(false);
   const [toastVisible, setToastVisible] = useState(false);
@@ -59,14 +214,28 @@ export const App: React.FC = () => {
     }, 300); // Match CSS animation duration
   };
 
+  // Keyboard shortcuts for UI state navigation
+  useEffect(() => {
+    if (!isTrayWindow && !isCloudPCWindow) {
+      const handleKeyDown = (event: KeyboardEvent) => {
+        if ((event.ctrlKey || event.metaKey)) {
+          if (event.key === '=' || event.key === '+') {
+            event.preventDefault();
+            incrementState();
+          } else if (event.key === '-') {
+            event.preventDefault();
+            decrementState();
+          }
+        }
+      };
+
+      document.addEventListener('keydown', handleKeyDown);
+      return () => document.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [isTrayWindow, isCloudPCWindow, incrementState, decrementState]);
+
   useEffect(() => {
     if (isTrayWindow) {
-      // Listen for Cloud PC disconnection
-      // @ts-ignore (window.electron is injected)
-      const removeListener = window.electron?.onCloudPCDisconnected(() => {
-        setIsCloudPCConnected(false);
-      });
-
       // Listen for file selection (prototype logging)
       // @ts-ignore (window.electron is injected)
       const removeFileListener = window.electron?.onFilesSelected((filePaths: string[]) => {
@@ -75,9 +244,6 @@ export const App: React.FC = () => {
       });
 
       return () => {
-        if (removeListener) {
-          removeListener();
-        }
         if (removeFileListener) {
           removeFileListener();
         }
@@ -137,6 +303,25 @@ export const App: React.FC = () => {
                   <img src={appIcon} className="window-icon" alt="Windows App" />
                   <span>Windows App</span>
                 </div>
+                <button 
+                  className="add-button"
+                  onClick={incrementState}
+                  disabled={uiState >= 4}
+                  style={{
+                    marginLeft: 'auto',
+                    marginRight: '16px',
+                    padding: '6px 12px',
+                    backgroundColor: uiState >= 4 ? '#e0e0e0' : '#0078d4',
+                    color: uiState >= 4 ? '#999' : 'white',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: uiState >= 4 ? 'not-allowed' : 'pointer',
+                    fontSize: '12px',
+
+                  }}
+                >
+                  Add
+                </button>
               </div>
             </div>
           ) : (
@@ -200,8 +385,9 @@ export const App: React.FC = () => {
       ) : (
         // Main Window and Tray Window Content
         <div className={`app-container ${isTrayWindow ? 'tray-mode' : ''}`}>
-        {!isTrayWindow && (
-          <nav className="nav-sidebar">
+        {!isTrayWindow && uiState > 0 && (
+          <nav className="nav-sidebar"
+          >
             <NavItem
               activeIcon={navStarActive}
               restIcon={navStarRest}
@@ -223,72 +409,67 @@ export const App: React.FC = () => {
               isActive={activeNav === 'apps'}
               onClick={() => setActiveNav('apps')}
             />
+            {uiState === 4 && (
+              <NavItem
+                activeIcon={navDevicesActive}
+                restIcon={navDevicesRest}
+                label="Management"
+                isActive={activeNav === 'management'}
+                onClick={() => setActiveNav('management')}
+              />
+            )}
           </nav>
         )}
-        <main className={`main-content ${isTrayWindow ? 'tray-mode' : ''}`}>
+        <main 
+          className={`main-content ${isTrayWindow ? 'tray-mode' : ''}`}
+          style={{
+            flex: 1,
+            padding: !isTrayWindow ? `${UI_TOKENS.PAGE_MARGIN}px` : undefined,
+            display: 'grid',
+            gridTemplateRows: 'auto 1fr',
+            gap: `${UI_TOKENS.GAP}px`
+          }}
+        >
           {isTrayWindow ? (
             <div className="tray-content">
               <section className="resource-section">
                 <h2>Devices</h2>
                 <div className="device-cards">
-                  <div 
-                    className={`device-card ${isCloudPCConnected ? 'connected' : ''}`}
-                    onClick={() => {
-                      setIsCloudPCConnected(true);
+                  <DeviceCard
+                    onConnect={() => {
                       // @ts-ignore (window.electron is injected)
                       window.electron?.openCloudPC();
                     }}
-                  >
-                    <div className="device-bg">
-                      <img src={cpcWallpaper} alt="Device wallpaper" />
-                    </div>
-                    <div className="device-info">
-                      <h3>Cloud PC</h3>
-                      <p>{isCloudPCConnected ? 'Connected' : '8vCPU | 56GB | 1024GB'}</p>
-                      {isCloudPCConnected && (
-                        <div className="action-buttons">
-                          <button className="action-button" onClick={(e) => {
-                            e.stopPropagation();
-                            // @ts-ignore (window.electron is injected)
-                            window.electron?.openFileUpload();
-                          }}>
-                            <img src={actionButtonUpload} alt="Upload" className="action-icon" />
-                            <span className="action-text">Upload files</span>
-                          </button>
-                          <button className="action-button" onClick={(e) => {
-                            e.stopPropagation();
-                            // Handle copilot mode action
-                          }}>
-                            <img src={actionButtonCopilot} alt="Copilot" className="action-icon" />
-                            <span className="action-text">Copilot mode</span>
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
+                  />
                 </div>
               </section>
               
               <section className="resource-section">
                 <h2>Apps</h2>
-                <div className="app-cards">
-                  <div className="app-card">
-                    <img src={app1Icon} alt="App 1" className="app-icon" />
-                  </div>
-                  <div className="app-card">
-                    <img src={app2Icon} alt="App 2" className="app-icon" />
-                  </div>
+                <div className="app-cards" style={{ display: 'flex', gap: '8px' }}>
+                  <AppCard appId="app1" />
+                  <AppCard appId="app2" />
                 </div>
               </section>
             </div>
           ) : (
-            <div>
-              {/* Main content area */}
-            </div>
+            <MainContentLayout 
+              uiState={uiState}
+              activeNav={activeNav}
+            />
           )}
         </main>
         </div>
       )}
     </>
+  );
+};
+
+// Main App component wrapped with UIProvider
+export const App: React.FC = () => {
+  return (
+    <UIProvider>
+      <AppContent />
+    </UIProvider>
   );
 };
