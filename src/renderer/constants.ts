@@ -21,10 +21,10 @@ export type UIState = 0 | 1 | 2 | 3 | 4;
 // Device card sizes for each state
 export const DEVICE_CARD_SIZES = {
   0: { width: 600, height: 400 },
-  1: { width: 600, height: 400 },
-  2: { width: 464, height: 309 },
-  3: { width: 464, height: 309 },
-  4: { width: 464, height: 309 },
+  1: { width: 464, height: 309 },
+  2: { width: 300, height: 210 },
+  3: { width: 300, height: 210 },
+  4: { width: 300, height: 210 },
 } as const;
 
 // App card size (consistent across states)

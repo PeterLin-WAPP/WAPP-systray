@@ -18,13 +18,11 @@ export const UIProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [uiState, setUIStateInternal] = useState<UIState>(0);
 
   const setWindowSize = (width: number, height: number, animated: boolean = false) => {
-    // @ts-ignore (window.electron is injected)
-    if (animated && window.electron?.setWindowSizeAnimated) {
-      // @ts-ignore (window.electron is injected)
-      window.electron.setWindowSizeAnimated(width, height, 350); // 350ms transition
-    } else if (window.electron?.setWindowSize) {
-      // @ts-ignore (window.electron is injected)
-      window.electron.setWindowSize(width, height);
+    const electronAPI = (window as any).electron;
+    if (animated && electronAPI?.setWindowSizeAnimated) {
+      electronAPI.setWindowSizeAnimated(width, height, 350); // 350ms transition
+    } else if (electronAPI?.setWindowSize) {
+      electronAPI.setWindowSize(width, height);
     }
   };
 

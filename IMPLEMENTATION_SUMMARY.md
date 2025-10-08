@@ -14,7 +14,7 @@ Successfully implemented a minimal-change refactor that introduces a 5-state UI 
 - Created `constants.ts` with NAV_WIDTH=240px, PAGE_MARGIN=24px, GAP=24px, TITLEBAR_HEIGHT=48px
 - Added `UIStore.tsx` with global uiState (0-4) management
 - Window sizing helper with IPC communication to main process
-- State 0 → 824×664, State 1+ → 1440×920
+- State 0 → 824×664, State 1+ → 1200×768
 
 ### 2. **Navigation System**
 - Navigation hidden at state 0, visible at states 1-4
@@ -41,20 +41,20 @@ Successfully implemented a minimal-change refactor that introduces a 5-state UI 
 - ✅ One DeviceCard 600×400
 - ✅ Content left-aligned with PAGE_MARGIN
 
-#### State 1 (S1): 1440×920
+#### State 1 (S1): 1200×768
 - ✅ Navigation visible (Devices, Apps)
 - ✅ Keep the device card
 - ✅ Add row of AppCards 140×170 under devices
 
-#### State 2 (S2): 1440×920
+#### State 2 (S2): 1200×768
 - ✅ Two DeviceCards side-by-side, both 464×309
 - ✅ Apps row remains
 
-#### State 3 (S3): 1440×920
+#### State 3 (S3): 1200×768
 - ✅ Three DeviceCards in row
 - ✅ Search field "Search devices and apps" + chips (Status, Type, Location)
 
-#### State 4 (S4): 1440×920
+#### State 4 (S4): 1200×768
 - ✅ Navigation adds Management (set active)
 - ✅ List view with columns: Name, Type, Owner, Status, Last Active, Actions
 - ✅ Search above table
@@ -95,10 +95,10 @@ src/renderer/
 | State | Window Size | Navigation | Layout | Cards | Status |
 |-------|-------------|------------|---------|-------|--------|
 | S0    | 824×664     | Hidden     | Left margin OK | 1 device 600×400 | ✅ |
-| S1    | 1440×920    | Visible (Devices/Apps) | Device + Apps row | Apps 140×170 | ✅ |
-| S2    | 1440×920    | Visible | 2 devices side-by-side | Both 464×309 | ✅ |
-| S3    | 1440×920    | Visible | 3 devices + search | Search + chips visible | ✅ |
-| S4    | 1440×920    | Management active | Table view | List replaces cards | ✅ |
+| S1    | 1200×768    | Visible (Devices/Apps) | Device + Apps row | Apps 140×170 | ✅ |
+| S2    | 1200×768    | Visible | 2 devices side-by-side | Both 464×309 | ✅ |
+| S3    | 1200×768    | Visible | 3 devices + search | Search + chips visible | ✅ |
+| S4    | 1200×768    | Management active | Table view | List replaces cards | ✅ |
 
 ## 🚀 Usage Instructions
 

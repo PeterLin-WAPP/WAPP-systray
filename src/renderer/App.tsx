@@ -37,66 +37,132 @@ const NavItem: React.FC<NavItemProps> = ({ activeIcon, restIcon, label, isActive
   </div>
 );
 
+// Collapsible Row Component for State 2+
+interface CollapsibleRowProps {
+  title: string;
+  children: React.ReactNode;
+  defaultExpanded?: boolean;
+}
+
+const CollapsibleRow: React.FC<CollapsibleRowProps> = ({ title, children, defaultExpanded = true }) => {
+  const [isExpanded, setIsExpanded] = useState(defaultExpanded);
+
+  return (
+    <div style={{ marginBottom: '24px' }}>
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          background: 'none',
+          border: 'none',
+          padding: '8px 0',
+          cursor: 'pointer',
+          fontSize: '16px',
+          fontWeight: '600',
+          color: '#333',
+          marginBottom: '16px',
+          outline: 'none'
+        }}
+        onFocus={(e) => e.target.style.outline = '2px solid #0078d4'}
+        onBlur={(e) => e.target.style.outline = 'none'}
+        role="button"
+        aria-expanded={isExpanded}
+      >
+        <span 
+          style={{
+            transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)',
+            transition: 'transform 300ms ease',
+            fontSize: '12px'
+          }}
+        >
+          ▶
+        </span>
+        {title}
+      </button>
+      <div
+        style={{
+          maxHeight: isExpanded ? '1000px' : '0',
+          overflow: 'hidden',
+          transition: 'max-height 300ms ease',
+        }}
+      >
+        {children}
+      </div>
+    </div>
+  );
+};
+
+// Search and Filters Component
+const SearchFilters: React.FC = () => (
+  <div style={{ marginTop: '16px', marginBottom: '24px' }}>
+    <input 
+      type="text" 
+      placeholder="Search devices and apps"
+      style={{ 
+        width: '300px', 
+        padding: '8px 12px', 
+        border: '1px solid #ccc', 
+        borderRadius: '4px',
+        marginRight: '12px'
+      }}
+    />
+    <button style={{ padding: '8px 12px', marginRight: '8px', border: '1px solid #ccc', borderRadius: '4px', backgroundColor: 'white' }}>Status</button>
+    <button style={{ padding: '8px 12px', marginRight: '8px', border: '1px solid #ccc', borderRadius: '4px', backgroundColor: 'white' }}>Type</button>
+    <button style={{ padding: '8px 12px', border: '1px solid #ccc', borderRadius: '4px', backgroundColor: 'white' }}>Location</button>
+  </div>
+);
+
 // Main Content Layout for different UI states
 interface MainContentLayoutProps {
   uiState: UIState;
   activeNav: string;
+  setActiveNav: (nav: string) => void;
 }
 
 const MainContentLayout: React.FC<MainContentLayoutProps> = ({
   uiState,
   activeNav,
+  setActiveNav,
 }) => {
-  const deviceCount = uiState === 0 ? 1 : uiState === 1 ? 1 : uiState >= 2 ? Math.min(uiState, 3) : 1;
+  const deviceCount = uiState === 0 ? 1 : uiState === 1 ? 2 : uiState >= 2 ? Math.min(uiState, 3) : 1;
 
+  // State 4: Management page
   if (uiState === 4 && activeNav === 'management') {
-    // State 4: Management list view
     return (
       <div style={{ display: 'grid', gridTemplateRows: 'auto 1fr', gap: `${UI_TOKENS.GAP}px` }}>
         <div>
           <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '600' }}>Management</h1>
-          <div style={{ marginTop: '16px' }}>
-            <input 
-              type="text" 
-              placeholder="Search devices and apps"
-              style={{ 
-                width: '300px', 
-                padding: '8px 12px', 
-                border: '1px solid #ccc', 
-                borderRadius: '4px',
-                marginRight: '12px'
-              }}
-            />
-            <button style={{ padding: '8px 12px', marginRight: '8px', border: '1px solid #ccc', borderRadius: '4px', backgroundColor: 'white' }}>Status</button>
-            <button style={{ padding: '8px 12px', marginRight: '8px', border: '1px solid #ccc', borderRadius: '4px', backgroundColor: 'white' }}>Type</button>
-            <button style={{ padding: '8px 12px', border: '1px solid #ccc', borderRadius: '4px', backgroundColor: 'white' }}>Location</button>
-          </div>
+          <SearchFilters />
         </div>
         <div>
           <table style={{ width: '100%', borderCollapse: 'collapse', backgroundColor: 'white', border: '1px solid #e0e0e0' }}>
             <thead>
               <tr style={{ backgroundColor: '#f9f9f9' }}>
-                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e0e0e0' }}>Name</th>
-                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e0e0e0' }}>Type</th>
-                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e0e0e0' }}>Owner</th>
-                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e0e0e0' }}>Status</th>
-                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e0e0e0' }}>Last Active</th>
+                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e0e0e0', cursor: 'pointer' }}>Name ↕</th>
+                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e0e0e0', cursor: 'pointer' }}>Type ↕</th>
+                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e0e0e0', cursor: 'pointer' }}>Owner ↕</th>
+                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e0e0e0', cursor: 'pointer' }}>Status ↕</th>
+                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e0e0e0', cursor: 'pointer' }}>Last Active ↕</th>
                 <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e0e0e0' }}>Actions</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td style={{ padding: '12px', borderBottom: '1px solid #e0e0e0' }}>Cloud PC</td>
-                <td style={{ padding: '12px', borderBottom: '1px solid #e0e0e0' }}>Device</td>
-                <td style={{ padding: '12px', borderBottom: '1px solid #e0e0e0' }}>User</td>
-                <td style={{ padding: '12px', borderBottom: '1px solid #e0e0e0' }}>Available</td>
-                <td style={{ padding: '12px', borderBottom: '1px solid #e0e0e0' }}>Now</td>
-                <td style={{ padding: '12px', borderBottom: '1px solid #e0e0e0' }}>
-                  <button style={{ padding: '4px 8px', fontSize: '12px', border: 'none', backgroundColor: '#0078d4', color: 'white', borderRadius: '2px' }}>
-                    Manage
-                  </button>
-                </td>
-              </tr>
+              {Array.from({ length: 12 }).map((_, index) => (
+                <tr key={index}>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #e0e0e0' }}>Cloud PC {index + 1}</td>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #e0e0e0' }}>Device</td>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #e0e0e0' }}>User {index + 1}</td>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #e0e0e0' }}>{index % 3 === 0 ? 'Available' : index % 3 === 1 ? 'In Use' : 'Maintenance'}</td>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #e0e0e0' }}>{index === 0 ? 'Now' : `${index} hours ago`}</td>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #e0e0e0' }}>
+                    <button style={{ padding: '4px 8px', fontSize: '12px', border: 'none', backgroundColor: '#0078d4', color: 'white', borderRadius: '2px' }}>
+                      Manage
+                    </button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -104,79 +170,243 @@ const MainContentLayout: React.FC<MainContentLayoutProps> = ({
     );
   }
 
-  return (
-    <div style={{ display: 'grid', gridTemplateRows: 'auto auto 1fr', gap: `${UI_TOKENS.GAP}px` }}>
-      {/* Header */}
-      <div>
-        <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '600' }}>
-          {uiState === 0 ? 'Cloud PC' : 'Devices and Apps'}
-        </h1>
-        {uiState === 3 && (
-          <div style={{ marginTop: '16px' }}>
-            <input 
-              type="text" 
-              placeholder="Search devices and apps"
-              style={{ 
-                width: '300px', 
-                padding: '8px 12px', 
-                border: '1px solid #ccc', 
-                borderRadius: '4px',
-                marginRight: '12px'
-              }}
-            />
-            <button style={{ padding: '8px 12px', marginRight: '8px', border: '1px solid #ccc', borderRadius: '4px', backgroundColor: 'white' }}>Status</button>
-            <button style={{ padding: '8px 12px', marginRight: '8px', border: '1px solid #ccc', borderRadius: '4px', backgroundColor: 'white' }}>Type</button>
-            <button style={{ padding: '8px 12px', border: '1px solid #ccc', borderRadius: '4px', backgroundColor: 'white' }}>Location</button>
-          </div>
-        )}
-      </div>
-
-      {/* Devices Section */}
-      <div>
-        <div 
-          style={{
-            display: 'grid',
-            gap: `${UI_TOKENS.GAP}px`,
-            gridTemplateColumns: uiState >= 2 ? `repeat(auto-fill, 464px)` : 'auto',
-            gridAutoFlow: uiState >= 2 ? 'row' : 'column',
-            justifyContent: uiState === 0 ? 'flex-start' : 'flex-start'
-          }}
-        >
-          {Array.from({ length: deviceCount }).map((_, index) => (
-            <DeviceCard
-              key={index}
-              onConnect={() => {
-                if (index === 0) {
-                  // @ts-ignore (window.electron is injected)
-                  window.electron?.openCloudPC();
-                }
-              }}
-            />
-          ))}
+  // State 2+ Favorites page - empty state
+  if (uiState === 2 && activeNav === 'favorites') {
+    return (
+      <div style={{ display: 'grid', gridTemplateRows: 'auto 1fr', gap: `${UI_TOKENS.GAP}px` }}>
+        <div>
+          <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '600' }}>Favorites</h1>
+        </div>
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center',
+          minHeight: '300px',
+          color: '#666',
+          fontSize: '16px'
+        }}>
+          Add your resources to favorites to see them here
         </div>
       </div>
+    );
+  }
 
-      {/* Apps Section - only visible for states 1+ */}
-      {uiState >= 1 && (
+  // State 3+ Favorites page - populated
+  if (uiState >= 3 && activeNav === 'favorites') {
+    return (
+      <div style={{ display: 'grid', gridTemplateRows: 'auto 1fr', gap: `${UI_TOKENS.GAP}px` }}>
         <div>
-          <h2 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '16px' }}>Apps</h2>
-          <div 
-            style={{
+          <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '600' }}>Favorites</h1>
+        </div>
+        <div>
+          {/* Devices Section */}
+          <div style={{ marginBottom: '32px' }}>
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'space-between',
+              marginBottom: '16px'
+            }}>
+              <h2 style={{ margin: 0, fontSize: '18px', fontWeight: '600' }}>Devices</h2>
+              <button 
+                onClick={() => setActiveNav('devices')}
+                style={{ 
+                  background: 'none',
+                  border: '1px solid #ccc',
+                  padding: '6px 12px',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  color: '#666'
+                }}
+              >
+                see devices
+              </button>
+            </div>
+            <div style={{ 
+              display: 'grid',
+              gridTemplateColumns: 'repeat(3, 300px)',
+              gap: `${UI_TOKENS.GAP}px`
+            }}>
+              {Array.from({ length: 3 }).map((_, index) => (
+                <DeviceCard key={index} />
+              ))}
+            </div>
+          </div>
+          
+          {/* Apps Section */}
+          <div>
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'space-between',
+              marginBottom: '16px'
+            }}>
+              <h2 style={{ margin: 0, fontSize: '18px', fontWeight: '600' }}>Apps</h2>
+              <button 
+                onClick={() => setActiveNav('apps')}
+                style={{ 
+                  background: 'none',
+                  border: '1px solid #ccc',
+                  padding: '6px 12px',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  color: '#666'
+                }}
+              >
+                see apps
+              </button>
+            </div>
+            <div style={{ 
               display: 'flex',
               gap: `${UI_TOKENS.GAP}px`,
               flexWrap: 'wrap'
+            }}>
+              {Array.from({ length: Math.min(7, 5 + uiState) }).map((_, index) => (
+                <AppCard
+                  key={index}
+                  appId={index < 2 ? (index === 0 ? 'app1' : 'app2') : undefined}
+                  name={index >= 2 ? `App ${index + 1}` : undefined}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // State 3+ Apps page
+  if (uiState >= 3 && activeNav === 'apps') {
+    return (
+      <div style={{ display: 'grid', gridTemplateRows: 'auto 1fr', gap: `${UI_TOKENS.GAP}px` }}>
+        <div>
+          <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '600' }}>Apps</h1>
+          <SearchFilters />
+        </div>
+        <div>
+          <CollapsibleRow title="Contoso North" defaultExpanded={true}>
+            <div style={{ 
+              display: 'flex',
+              gap: `${UI_TOKENS.GAP}px`,
+              flexWrap: 'wrap',
+              marginBottom: '16px'
+            }}>
+              {Array.from({ length: 3 }).map((_, index) => (
+                <AppCard
+                  key={index}
+                  appId={index < 2 ? (index === 0 ? 'app1' : 'app2') : undefined}
+                  name={index >= 2 ? `App ${index + 1}` : undefined}
+                />
+              ))}
+            </div>
+          </CollapsibleRow>
+          
+          <CollapsibleRow title="Contoso South" defaultExpanded={true}>
+            <div style={{ 
+              display: 'flex',
+              gap: `${UI_TOKENS.GAP}px`,
+              flexWrap: 'wrap'
+            }}>
+              {Array.from({ length: 4 }).map((_, index) => (
+                <AppCard
+                  key={index + 3}
+                  name={`App ${index + 4}`}
+                />
+              ))}
+            </div>
+          </CollapsibleRow>
+        </div>
+      </div>
+    );
+  }
+
+  // Default Devices page for states 0-2+
+  return (
+    <div style={{ display: 'grid', gridTemplateRows: 'auto 1fr', gap: `${UI_TOKENS.GAP}px` }}>
+      {/* Header */}
+      <div>
+        <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '600' }}>
+          {uiState === 0 ? 'Your Cloud PC' : 'Devices'}
+        </h1>
+        {uiState === 0 && (
+          <p style={{ margin: '4px 0 0 0', fontSize: '14px', color: '#666', fontWeight: '400' }}>
+            Contoso Finance
+          </p>
+        )}
+        {uiState >= 2 && <SearchFilters />}
+      </div>
+
+      {/* Content */}
+      <div>
+        {uiState >= 2 ? (
+          // State 2+: Collapsible rows layout
+          <>
+            <CollapsibleRow title="Contoso North" defaultExpanded={true}>
+              <div style={{ 
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, 300px)',
+                gap: `${UI_TOKENS.GAP}px`,
+                marginBottom: '16px'
+              }}>
+                {Array.from({ length: 2 }).map((_, index) => (
+                  <DeviceCard
+                    key={index}
+                    onConnect={() => {
+                      if (index === 0) {
+                        // @ts-ignore (window.electron is injected)
+                        window.electron?.openCloudPC();
+                      }
+                    }}
+                  />
+                ))}
+              </div>
+            </CollapsibleRow>
+            
+            <CollapsibleRow title="Contoso South" defaultExpanded={true}>
+              <div style={{ 
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, 300px)',
+                gap: `${UI_TOKENS.GAP}px`
+              }}>
+                {Array.from({ length: Math.max(1, deviceCount - 2) }).map((_, index) => (
+                  <DeviceCard
+                    key={index + 2}
+                    onConnect={() => {
+                      // @ts-ignore (window.electron is injected)
+                      window.electron?.openCloudPC();
+                    }}
+                  />
+                ))}
+              </div>
+            </CollapsibleRow>
+          </>
+        ) : (
+          // State 0-1: Simple grid layout
+          <div 
+            style={{
+              display: 'grid',
+              gap: `${UI_TOKENS.GAP}px`,
+              gridTemplateColumns: uiState === 0 ? 'auto' : uiState === 1 ? 'repeat(2, 464px)' : 'repeat(auto-fill, 300px)',
+              gridAutoFlow: 'row',
+              justifyContent: 'flex-start'
             }}
           >
-            {Array.from({ length: Math.min(7, 5 + uiState) }).map((_, index) => (
-              <AppCard
+            {Array.from({ length: deviceCount }).map((_, index) => (
+              <DeviceCard
                 key={index}
-                appId={index < 2 ? (index === 0 ? 'app1' : 'app2') : undefined}
-                name={index >= 2 ? `App ${index + 1}` : undefined}
+                onConnect={() => {
+                  if (index === 0) {
+                    // @ts-ignore (window.electron is injected)
+                    window.electron?.openCloudPC();
+                  }
+                }}
               />
             ))}
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
@@ -186,14 +416,14 @@ const AppContent: React.FC = () => {
   const { uiState, incrementState, decrementState } = useUIStore();
   const [activeNav, setActiveNav] = useState('devices');
 
-  // Set Management as active when reaching state 4
+  // Set appropriate nav based on state
   useEffect(() => {
     if (uiState === 4) {
       setActiveNav('management');
-    } else if (uiState > 0 && activeNav === 'management') {
+    } else if (uiState >= 1) {
       setActiveNav('devices');
     }
-  }, [uiState, activeNav]);
+  }, [uiState]);
 
   const [isLoaderVisible, setIsLoaderVisible] = useState(true);
   const [showSession, setShowSession] = useState(false);
@@ -388,13 +618,15 @@ const AppContent: React.FC = () => {
         {!isTrayWindow && uiState > 0 && (
           <nav className="nav-sidebar"
           >
-            <NavItem
-              activeIcon={navStarActive}
-              restIcon={navStarRest}
-              label="Favorites"
-              isActive={activeNav === 'favorites'}
-              onClick={() => setActiveNav('favorites')}
-            />
+            {uiState >= 2 && (
+              <NavItem
+                activeIcon={navStarActive}
+                restIcon={navStarRest}
+                label="Favorites"
+                isActive={activeNav === 'favorites'}
+                onClick={() => setActiveNav('favorites')}
+              />
+            )}
             <NavItem
               activeIcon={navDevicesActive}
               restIcon={navDevicesRest}
@@ -402,13 +634,15 @@ const AppContent: React.FC = () => {
               isActive={activeNav === 'devices'}
               onClick={() => setActiveNav('devices')}
             />
-            <NavItem
-              activeIcon={navAppActive}
-              restIcon={navAppRest}
-              label="Apps"
-              isActive={activeNav === 'apps'}
-              onClick={() => setActiveNav('apps')}
-            />
+            {uiState >= 3 && (
+              <NavItem
+                activeIcon={navAppActive}
+                restIcon={navAppRest}
+                label="Apps"
+                isActive={activeNav === 'apps'}
+                onClick={() => setActiveNav('apps')}
+              />
+            )}
             {uiState === 4 && (
               <NavItem
                 activeIcon={navDevicesActive}
@@ -456,6 +690,7 @@ const AppContent: React.FC = () => {
             <MainContentLayout 
               uiState={uiState}
               activeNav={activeNav}
+              setActiveNav={setActiveNav}
             />
           )}
         </main>
