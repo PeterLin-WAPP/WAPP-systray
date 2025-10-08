@@ -18,9 +18,12 @@ const navDevicesActive = require('../../assets/icons/nav-devices-active.svg');
 const navDevicesRest = require('../../assets/icons/nav-devices-rest.svg');
 const navAppActive = require('../../assets/icons/nav-app-active.svg');
 const navAppRest = require('../../assets/icons/nav-app-rest.svg');
+const chevronIcon = require('../../assets/icons/Chevron.svg');
 // Wallpapers
 const cpcLoadingBackground = require('../../assets/wallpapers/CPCloadingbackground.png');
 const cpcSession = require('../../assets/wallpapers/CPCsession.png');
+// Illustrations
+const favoritesEmptyState = require('../../assets/illustrations/favorites-empty-state.png');
 
 interface NavItemProps {
   activeIcon: string;
@@ -59,10 +62,13 @@ const CollapsibleRow: React.FC<CollapsibleRowProps> = ({ title, children, defaul
           border: 'none',
           padding: '8px 0',
           cursor: 'pointer',
-          fontSize: '16px',
+          fontFamily: '"Segoe UI"',
+          fontSize: '16.017px',
+          fontStyle: 'normal',
           fontWeight: '600',
+          lineHeight: '22.882px',
           color: '#333',
-          marginBottom: '16px',
+          marginBottom: '12px',
           outline: 'none'
         }}
         onFocus={(e) => e.target.style.outline = '2px solid #0078d4'}
@@ -70,22 +76,23 @@ const CollapsibleRow: React.FC<CollapsibleRowProps> = ({ title, children, defaul
         role="button"
         aria-expanded={isExpanded}
       >
-        <span 
+        <img 
+          src={chevronIcon}
+          alt="Chevron"
           style={{
-            transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)',
-            transition: 'transform 300ms ease',
-            fontSize: '12px'
+            transform: isExpanded ? 'rotate(270deg)' : 'rotate(180deg)',
+            transition: 'transform 0.2s ease-in-out',
+            width: '16px',
+            height: '16px'
           }}
-        >
-          ▶
-        </span>
+        />
         {title}
       </button>
       <div
         style={{
           maxHeight: isExpanded ? '1000px' : '0',
           overflow: 'hidden',
-          transition: 'max-height 300ms ease',
+          transition: 'max-height 0.2s ease-in-out',
         }}
       >
         {children}
@@ -96,7 +103,13 @@ const CollapsibleRow: React.FC<CollapsibleRowProps> = ({ title, children, defaul
 
 // Search and Filters Component
 const SearchFilters: React.FC = () => (
-  <div style={{ marginTop: '16px', marginBottom: '24px' }}>
+  <div style={{ 
+    marginTop: '16px', 
+    marginBottom: '24px',
+    opacity: 1,
+    transform: 'translateY(0)',
+    transition: 'all 0.2s ease-in-out'
+  }}>
     <input 
       type="text" 
       placeholder="Search devices and apps"
@@ -179,13 +192,23 @@ const MainContentLayout: React.FC<MainContentLayoutProps> = ({
         </div>
         <div style={{ 
           display: 'flex', 
+          flexDirection: 'column',
           alignItems: 'center', 
           justifyContent: 'center',
           minHeight: '300px',
           color: '#666',
-          fontSize: '16px'
+          fontSize: '16px',
+          gap: '24px'
         }}>
-          Add your resources to favorites to see them here
+          <img 
+            src={favoritesEmptyState} 
+            alt="Empty favorites illustration"
+            style={{ 
+              width: '200px',
+              height: 'auto'
+            }}
+          />
+          <span>Add your resources to favorites to see them here</span>
         </div>
       </div>
     );
@@ -324,9 +347,14 @@ const MainContentLayout: React.FC<MainContentLayoutProps> = ({
 
   // Default Devices page for states 0-2+
   return (
-    <div style={{ display: 'grid', gridTemplateRows: 'auto 1fr', gap: `${UI_TOKENS.GAP}px` }}>
+    <div style={{ 
+      display: 'grid', 
+      gridTemplateRows: 'auto 1fr', 
+      gap: `${UI_TOKENS.GAP}px`,
+      transition: 'all 0.2s ease-in-out'
+    }}>
       {/* Header */}
-      <div>
+      <div style={{ transition: 'all 0.2s ease-in-out' }}>
         <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '600' }}>
           {uiState === 0 ? 'Your Cloud PC' : 'Devices'}
         </h1>
@@ -348,7 +376,7 @@ const MainContentLayout: React.FC<MainContentLayoutProps> = ({
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fill, 300px)',
                 gap: `${UI_TOKENS.GAP}px`,
-                marginBottom: '16px'
+                transition: 'all 0.2s ease-in-out'
               }}>
                 {Array.from({ length: 2 }).map((_, index) => (
                   <DeviceCard
@@ -368,7 +396,8 @@ const MainContentLayout: React.FC<MainContentLayoutProps> = ({
               <div style={{ 
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fill, 300px)',
-                gap: `${UI_TOKENS.GAP}px`
+                gap: `${UI_TOKENS.GAP}px`,
+                transition: 'all 0.2s ease-in-out'
               }}>
                 {Array.from({ length: Math.max(1, deviceCount - 2) }).map((_, index) => (
                   <DeviceCard
@@ -390,7 +419,8 @@ const MainContentLayout: React.FC<MainContentLayoutProps> = ({
               gap: `${UI_TOKENS.GAP}px`,
               gridTemplateColumns: uiState === 0 ? 'auto' : uiState === 1 ? 'repeat(2, 464px)' : 'repeat(auto-fill, 300px)',
               gridAutoFlow: 'row',
-              justifyContent: 'flex-start'
+              justifyContent: 'flex-start',
+              transition: 'all 0.2s ease-in-out'
             }}
           >
             {Array.from({ length: deviceCount }).map((_, index) => (

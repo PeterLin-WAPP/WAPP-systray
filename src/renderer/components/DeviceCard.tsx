@@ -26,7 +26,7 @@ export const DeviceCard: React.FC<DeviceCardProps> = ({
     backgroundColor: '#ffffff',
     border: '1px solid #e0e0e0',
     cursor: 'pointer',
-    transition: 'all 0.2s ease',
+    transition: 'all 0.2s ease-in-out',
     position: 'relative',
   };
 
@@ -49,8 +49,8 @@ export const DeviceCard: React.FC<DeviceCardProps> = ({
       </div>
       <div className="device-info" style={{ 
         padding: '16px',
-        background: 'rgba(255, 255, 255, 0.95)',
-        backdropFilter: 'blur(10px)'
+        background: 'rgba(255, 255, 255, 0.55)',
+        backdropFilter: 'blur(20px)'
       }}>
         <h3 style={{ margin: '0 0 8px 0', fontSize: '16px', fontWeight: '600' }}>Cloud PC</h3>
         <p style={{ margin: '0 0 12px 0', fontSize: '14px', color: '#666' }}>
