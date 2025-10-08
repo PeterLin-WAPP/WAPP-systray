@@ -11,6 +11,13 @@ const appIcon = require('../../assets/icons/icon.ico');
 const expandIcon = require('../../assets/icons/expand.svg');
 const profileIcon = require('../../assets/icons/profile.png');
 const wappLoader = require('../../assets/icons/WAPPloader.svg');
+const addIcon = require('../../assets/icons/Add.svg');
+const moreIcon = require('../../assets/icons/More.svg');
+const notificationsIcon = require('../../assets/icons/notifications.svg');
+const settingsIcon = require('../../assets/icons/settings.svg');
+const chevronHelpIcon = require('../../assets/icons/Chevron-help.svg');
+const quicktourIcon = require('../../assets/icons/quicktour.svg');
+const helpIcon = require('../../assets/icons/help.svg');
 // Navigation Icons
 const navStarActive = require('../../assets/icons/nav-star-active.svg');
 const navStarRest = require('../../assets/icons/nav-star-rest.svg');
@@ -441,10 +448,85 @@ const MainContentLayout: React.FC<MainContentLayoutProps> = ({
   );
 };
 
+// Dropdown Menu Component
+interface DropdownMenuProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onHelpSubmenuOpen: () => void;
+  onHelpSubmenuClose: () => void;
+  isHelpSubmenuOpen: boolean;
+}
+
+const DropdownMenu: React.FC<DropdownMenuProps> = ({ isOpen, onClose, onHelpSubmenuOpen, onHelpSubmenuClose, isHelpSubmenuOpen }) => {
+  const [submenuTimeout, setSubmenuTimeout] = useState<NodeJS.Timeout | null>(null);
+
+  const handleHelpMouseEnter = () => {
+    if (submenuTimeout) {
+      clearTimeout(submenuTimeout);
+      setSubmenuTimeout(null);
+    }
+    onHelpSubmenuOpen();
+  };
+
+  const handleHelpMouseLeave = () => {
+    const timeout = setTimeout(() => {
+      onHelpSubmenuClose();
+    }, 300);
+    setSubmenuTimeout(timeout);
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="dropdown-overlay" onClick={onClose}>
+      <div className="dropdown-menu" onClick={(e) => e.stopPropagation()}>
+        <div className="dropdown-item" onClick={onClose}>
+          <img src={notificationsIcon} alt="Notifications" className="dropdown-icon" />
+          <span>Notifications</span>
+        </div>
+        <div className="dropdown-item" onClick={onClose}>
+          <img src={settingsIcon} alt="Settings" className="dropdown-icon" />
+          <span>Settings</span>
+        </div>
+        <div 
+          className="dropdown-item has-submenu"
+          onMouseEnter={handleHelpMouseEnter}
+          onMouseLeave={handleHelpMouseLeave}
+        >
+          <img src={helpIcon} alt="Help" className="dropdown-icon" />
+          <span>Help</span>
+          <img src={chevronHelpIcon} alt="Chevron" className="dropdown-chevron" />
+        </div>
+        
+        {/* Help Submenu */}
+        {isHelpSubmenuOpen && (
+          <div 
+            className="dropdown-submenu"
+            onMouseEnter={handleHelpMouseEnter}
+            onMouseLeave={handleHelpMouseLeave}
+          >
+            <div className="dropdown-item submenu-item" onClick={onClose}>
+              <span>Health</span>
+            </div>
+            <div className="dropdown-item submenu-item" onClick={onClose}>
+              <span>Quick tour</span>
+            </div>
+            <div className="dropdown-item submenu-item" onClick={onClose}>
+              <span>Feedback</span>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 // Main App Content Component
 const AppContent: React.FC = () => {
   const { uiState, incrementState, decrementState } = useUIStore();
   const [activeNav, setActiveNav] = useState('devices');
+  const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
+  const [isHelpSubmenuOpen, setIsHelpSubmenuOpen] = useState(false);
 
   // Set appropriate nav based on state
   useEffect(() => {
@@ -454,6 +536,21 @@ const AppContent: React.FC = () => {
       setActiveNav('devices');
     }
   }, [uiState]);
+
+  // Close dropdown menu on escape key
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsMoreMenuOpen(false);
+        setIsHelpSubmenuOpen(false);
+      }
+    };
+
+    if (isMoreMenuOpen) {
+      document.addEventListener('keydown', handleKeyDown);
+      return () => document.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [isMoreMenuOpen]);
 
   const [isLoaderVisible, setIsLoaderVisible] = useState(true);
   const [showSession, setShowSession] = useState(false);
@@ -563,26 +660,96 @@ const AppContent: React.FC = () => {
                   <img src={appIcon} className="window-icon" alt="Windows App" />
                   <span>Windows App</span>
                 </div>
-                <button 
-                  className="add-button"
-                  onClick={incrementState}
-                  disabled={uiState >= 4}
-                  style={{
-                    marginLeft: 'auto',
-                    marginRight: '16px',
-                    padding: '6px 12px',
-                    backgroundColor: uiState >= 4 ? '#e0e0e0' : '#0078d4',
-                    color: uiState >= 4 ? '#999' : 'white',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: uiState >= 4 ? 'not-allowed' : 'pointer',
-                    fontSize: '12px',
-
-                  }}
-                >
-                  Add
-                </button>
+                <div className="titlebar-controls">
+                  {/* Minus Button - invisible at state 0 */}
+                  <button 
+                    className={`titlebar-button ${uiState === 0 ? 'hidden' : ''}`}
+                    onClick={decrementState}
+                    disabled={uiState === 0}
+                    title={uiState === 0 ? "" : "Remove content"}
+                  >
+                    <span className="minus-icon">−</span>
+                  </button>
+                  
+                  {/* Add Button */}
+                  <button 
+                    className="titlebar-button"
+                    onClick={incrementState}
+                    disabled={uiState >= 4}
+                    title={uiState >= 4 ? "Maximum state reached" : "Add more content"}
+                  >
+                    <img src={addIcon} alt="Add" style={{ width: '16px', height: '16px' }} />
+                  </button>
+                  
+                  {/* Divider */}
+                  <div className="titlebar-divider" />
+                  
+                  {/* More Button */}
+                  <button 
+                    className="titlebar-button"
+                    onClick={() => setIsMoreMenuOpen(!isMoreMenuOpen)}
+                    title="More options"
+                  >
+                    <img src={moreIcon} alt="More" style={{ width: '16px', height: '16px' }} />
+                  </button>
+                  
+                  {/* Me Control */}
+                  <div className="titlebar-me-control">
+                    <img 
+                      src={profileIcon} 
+                      alt="Profile" 
+                      style={{ 
+                        width: '100%', 
+                        height: '100%', 
+                        objectFit: 'cover' 
+                      }} 
+                    />
+                  </div>
+                  
+                  {/* Window Controls */}
+                  <div className="window-controls">
+                    <button 
+                      className="window-control-button minimize"
+                      onClick={() => {
+                        // @ts-ignore
+                        window.electron?.minimizeWindow?.();
+                      }}
+                    >
+                      &#8212;
+                    </button>
+                    <button 
+                      className="window-control-button maximize"
+                      onClick={() => {
+                        // @ts-ignore
+                        window.electron?.maximizeWindow?.();
+                      }}
+                    >
+                      &#9633;
+                    </button>
+                    <button 
+                      className="window-control-button close"
+                      onClick={() => {
+                        // @ts-ignore
+                        window.electron?.closeWindow?.();
+                      }}
+                    >
+                      &#10005;
+                    </button>
+                  </div>
+                </div>
               </div>
+              
+              {/* Dropdown Menu */}
+              <DropdownMenu 
+                isOpen={isMoreMenuOpen}
+                onClose={() => {
+                  setIsMoreMenuOpen(false);
+                  setIsHelpSubmenuOpen(false);
+                }}
+                onHelpSubmenuOpen={() => setIsHelpSubmenuOpen(true)}
+                onHelpSubmenuClose={() => setIsHelpSubmenuOpen(false)}
+                isHelpSubmenuOpen={isHelpSubmenuOpen}
+              />
             </div>
           ) : (
             <div className="tray-titlebar">

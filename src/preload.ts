@@ -10,6 +10,9 @@ contextBridge.exposeInMainWorld(
     openFileUpload: () => ipcRenderer.send('open-file-upload'),
     setWindowSize: (width: number, height: number) => ipcRenderer.send('set-window-size', width, height),
     setWindowSizeAnimated: (width: number, height: number, duration?: number) => ipcRenderer.send('set-window-size-animated', width, height, duration),
+    minimizeWindow: () => ipcRenderer.send('minimize-window'),
+    maximizeWindow: () => ipcRenderer.send('maximize-window'),
+    closeWindow: () => ipcRenderer.send('close-window'),
     onCloudPCDisconnected: (callback: () => void) => {
       const listener = () => callback();
       ipcRenderer.on('cloud-pc-disconnected', listener);

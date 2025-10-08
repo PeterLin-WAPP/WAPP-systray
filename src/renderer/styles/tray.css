@@ -65,7 +65,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 16px;
+  padding: 12px;
   background: rgba(255, 255, 255, 0.55);
   backdrop-filter: blur(24px);
   border-bottom-left-radius: 8px;
@@ -159,7 +159,6 @@
 }
 
 .device-info h3 {
-  font-size: 16px;
   margin: 0 0 4px 0;
   font-weight: 600;
   font-family: 'Segoe UI', system-ui, sans-serif;

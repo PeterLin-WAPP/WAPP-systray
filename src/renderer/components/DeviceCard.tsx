@@ -48,12 +48,29 @@ export const DeviceCard: React.FC<DeviceCardProps> = ({
         />
       </div>
       <div className="device-info" style={{ 
-        padding: '16px',
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        padding: '18px',
         background: 'rgba(255, 255, 255, 0.55)',
-        backdropFilter: 'blur(20px)'
+        backdropFilter: 'blur(24px)',
+        borderBottomLeftRadius: '8px',
+        borderBottomRightRadius: '8px'
       }}>
-        <h3 style={{ margin: '0 0 8px 0', fontSize: '16px', fontWeight: '600' }}>Cloud PC</h3>
-        <p style={{ margin: '0 0 12px 0', fontSize: '14px', color: '#666' }}>
+        <h3 style={{ 
+          margin: '0 0 4px 0', 
+          fontWeight: '600', 
+          fontFamily: "'Segoe UI', system-ui, sans-serif",
+          fontSize: '14px'
+        }}>Cloud PC</h3>
+        <p style={{ 
+          fontSize: '12px', 
+          margin: '0', 
+          color: '#666', 
+          fontWeight: '400',
+          fontFamily: "'Segoe UI', system-ui, sans-serif" 
+        }}>
           8vCPU | 56GB | 1024GB
         </p>
       </div>

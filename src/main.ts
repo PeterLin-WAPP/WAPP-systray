@@ -13,12 +13,6 @@ function createMainWindow() {
     height: 664,
     icon: iconPath,
     frame: false,
-    titleBarStyle: 'hidden',
-    titleBarOverlay: {
-      color: '#f4f4f4',
-      symbolColor: '#000000',
-      height: 48
-    },
     backgroundColor: '#f4f4f4',
     webPreferences: {
       nodeIntegration: false,
@@ -301,5 +295,28 @@ ipcMain.on('set-window-size-animated', (event, width: number, height: number, du
     };
     
     animate();
+  }
+});
+
+// Window control handlers
+ipcMain.on('minimize-window', () => {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.minimize();
+  }
+});
+
+ipcMain.on('maximize-window', () => {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    if (mainWindow.isMaximized()) {
+      mainWindow.unmaximize();
+    } else {
+      mainWindow.maximize();
+    }
+  }
+});
+
+ipcMain.on('close-window', () => {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.close();
   }
 });
