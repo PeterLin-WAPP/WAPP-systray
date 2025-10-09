@@ -884,7 +884,7 @@ const AppContent: React.FC = () => {
                     className="titlebar-button"
                     onClick={incrementState}
                     disabled={uiState >= 4}
-                    title={uiState >= 4 ? "Maximum state reached" : "Add more content"}
+                    title={uiState >= 4 ? "Maximum state reached" : "Add resources"}
                   >
                     <img src={addIcon} alt="Add" style={{ width: '16px', height: '16px' }} />
                   </button>
