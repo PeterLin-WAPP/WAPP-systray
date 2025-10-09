@@ -8,10 +8,14 @@ const moreIcon = require('../../../assets/icons/More.svg');
 
 interface DeviceCardProps {
   onConnect?: () => void;
+  name?: string;
+  specs?: string;
 }
 
 export const DeviceCard: React.FC<DeviceCardProps> = ({
   onConnect,
+  name = "My Cloud PC",
+  specs = "8vCPU | 32GB | 512GB",
 }) => {
   const { uiState } = useUIStore();
   const { width, height } = DEVICE_CARD_SIZES[uiState];
@@ -68,7 +72,7 @@ export const DeviceCard: React.FC<DeviceCardProps> = ({
             fontWeight: '600', 
             fontFamily: "'Segoe UI', system-ui, sans-serif",
             fontSize: '14px'
-          }}>My Cloud PC</h3>
+          }}>{name}</h3>
           <p style={{ 
             fontSize: '12px', 
             margin: '0', 
@@ -76,7 +80,7 @@ export const DeviceCard: React.FC<DeviceCardProps> = ({
             fontWeight: '400',
             fontFamily: "'Segoe UI', system-ui, sans-serif" 
           }}>
-            8vCPU | 32GB | 512GB
+            {specs}
           </p>
         </div>
         <button 

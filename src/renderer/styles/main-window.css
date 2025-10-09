@@ -80,5 +80,5 @@
 }
 
 .app-card:hover .app-info {
-  background: rgba(255, 255, 255, 0.35) !important;
+  background: rgba(255, 255, 255, 0.75) !important;
 }

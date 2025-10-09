@@ -449,9 +449,20 @@ const MainContentLayout: React.FC<MainContentLayoutProps> = ({
               gridTemplateColumns: 'repeat(3, 300px)',
               gap: `${UI_TOKENS.GAP}px`
             }}>
-              {Array.from({ length: 3 }).map((_, index) => (
-                <DeviceCard key={index} />
-              ))}
+              {Array.from({ length: 3 }).map((_, index) => {
+                const deviceVariations = [
+                  { name: "My Cloud PC", specs: "8vCPU | 32GB | 512GB" },
+                  { name: "Project PC", specs: "4vCPU | 16GB | 256GB" },
+                  { name: "Testing Environment", specs: "2vCPU | 8GB | 128GB" }
+                ];
+                return (
+                  <DeviceCard 
+                    key={index} 
+                    name={deviceVariations[index]?.name}
+                    specs={deviceVariations[index]?.specs}
+                  />
+                );
+              })}
             </div>
           </div>
           
@@ -593,17 +604,26 @@ const MainContentLayout: React.FC<MainContentLayoutProps> = ({
                 gap: `${UI_TOKENS.GAP}px`,
                 transition: 'all 0.2s ease-in-out'
               }}>
-                {Array.from({ length: 3 }).map((_, index) => (
-                  <DeviceCard
-                    key={index}
-                    onConnect={() => {
-                      if (index === 0) {
-                        // @ts-ignore (window.electron is injected)
-                        window.electron?.openCloudPC();
-                      }
-                    }}
-                  />
-                ))}
+                {Array.from({ length: 3 }).map((_, index) => {
+                  const deviceVariations = [
+                    { name: "My Cloud PC", specs: "8vCPU | 32GB | 512GB" },
+                    { name: "Project PC", specs: "16vCPU | 64GB | 1TB" },
+                    { name: "Testing Environment", specs: "12vCPU | 48GB | 512GB" }
+                  ];
+                  return (
+                    <DeviceCard
+                      key={index}
+                      name={deviceVariations[index]?.name}
+                      specs={deviceVariations[index]?.specs}
+                      onConnect={() => {
+                        if (index === 0) {
+                          // @ts-ignore (window.electron is injected)
+                          window.electron?.openCloudPC();
+                        }
+                      }}
+                    />
+                  );
+                })}
               </div>
             </CollapsibleRow>
             
@@ -614,15 +634,24 @@ const MainContentLayout: React.FC<MainContentLayoutProps> = ({
                 gap: `${UI_TOKENS.GAP}px`,
                 transition: 'all 0.2s ease-in-out'
               }}>
-                {Array.from({ length: Math.max(1, deviceCount - 2) }).map((_, index) => (
-                  <DeviceCard
-                    key={index + 2}
-                    onConnect={() => {
-                      // @ts-ignore (window.electron is injected)
-                      window.electron?.openCloudPC();
-                    }}
-                  />
-                ))}
+                {Array.from({ length: Math.max(1, deviceCount - 2) }).map((_, index) => {
+                  const deviceVariations = [
+                    { name: "Finance PC", specs: "4vCPU | 16GB | 256GB" },
+                    { name: "HR Workstation", specs: "6vCPU | 24GB | 512GB" },
+                    { name: "Marketing PC", specs: "8vCPU | 32GB | 256GB" }
+                  ];
+                  return (
+                    <DeviceCard
+                      key={index + 2}
+                      name={deviceVariations[index]?.name}
+                      specs={deviceVariations[index]?.specs}
+                      onConnect={() => {
+                        // @ts-ignore (window.electron is injected)
+                        window.electron?.openCloudPC();
+                      }}
+                    />
+                  );
+                })}
               </div>
             </CollapsibleRow>
           </>
@@ -638,17 +667,25 @@ const MainContentLayout: React.FC<MainContentLayoutProps> = ({
               transition: 'all 0.2s ease-in-out'
             }}
           >
-            {Array.from({ length: deviceCount }).map((_, index) => (
-              <DeviceCard
-                key={index}
-                onConnect={() => {
-                  if (index === 0) {
-                    // @ts-ignore (window.electron is injected)
-                    window.electron?.openCloudPC();
-                  }
-                }}
-              />
-            ))}
+            {Array.from({ length: deviceCount }).map((_, index) => {
+              const deviceVariations = [
+                { name: "My Cloud PC", specs: "8vCPU | 32GB | 512GB" },
+                { name: "Project PC", specs: "6vCPU | 24GB | 256GB" }
+              ];
+              return (
+                <DeviceCard
+                  key={index}
+                  name={deviceVariations[index]?.name}
+                  specs={deviceVariations[index]?.specs}
+                  onConnect={() => {
+                    if (index === 0) {
+                      // @ts-ignore (window.electron is injected)
+                      window.electron?.openCloudPC();
+                    }
+                  }}
+                />
+              );
+            })}
           </div>
         )}
       </div>
@@ -740,6 +777,8 @@ const AppContent: React.FC = () => {
   useEffect(() => {
     if (uiState === 4) {
       setActiveNav('management');
+    } else if (uiState === 3) {
+      setActiveNav('favorites');
     } else if (uiState >= 1) {
       setActiveNav('devices');
     }
@@ -1024,8 +1063,8 @@ const AppContent: React.FC = () => {
           height: '100vh',
           overflow: 'hidden'
         }}>
-        {!isTrayWindow && uiState > 0 && (
-          <nav className="nav-sidebar" style={{
+        {!isTrayWindow && (
+          <nav className={`nav-sidebar ${uiState <= 1 ? 'hidden' : 'visible'}`} style={{
             flexShrink: 0,
             width: `${UI_TOKENS.NAV_WIDTH}px`,
             height: '100vh',

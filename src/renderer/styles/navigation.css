@@ -10,7 +10,18 @@
   flex-direction: column;
   align-items: center;
   padding-top: 20px;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), margin-left 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   /* border-right: 1px solid #e0e0e0; */
+}
+
+.nav-sidebar.hidden {
+  transform: translateX(-100%);
+  margin-left: -72px;
+}
+
+.nav-sidebar.visible {
+  transform: translateX(0);
+  margin-left: 0;
 }
 
 .nav-item {

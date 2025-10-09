@@ -9,10 +9,10 @@ export const UI_TOKENS = {
 // Window size configurations for each UI state
 export const WINDOW_SIZES = {
   0: { width: 800, height: 600 },
-  1: { width: 1200, height: 768 },
-  2: { width: 1200, height: 768 },
-  3: { width: 1200, height: 768 },
-  4: { width: 1200, height: 768 },
+  1: { width: 1080, height: 768 },
+  2: { width: 1080, height: 768 },
+  3: { width: 1080, height: 768 },
+  4: { width: 1080, height: 768 },
 } as const;
 
 // UI States
